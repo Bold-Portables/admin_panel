@@ -1,0 +1,38 @@
+.loaderHolder {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 0;
+    background-color: rgba(#000000, 0.5);
+    left: 0;
+    z-index: 9999;
+}
+
+a {
+    cursor: pointer;
+ }
+
+ .product_details_image img {
+    max-height: 120px;
+    width: 100%;
+    padding: 5px
+ }
+
+ .bg-white{
+    background:#ffffff;
+}
+
+.card .page-item .btn_active {
+    color:#755DD9;
+    cursor: pointer;
+    font-weight: 600
+}
+
+.card .page-item .page_num {
+    cursor: pointer;
+    font-weight: 600
+}
+
