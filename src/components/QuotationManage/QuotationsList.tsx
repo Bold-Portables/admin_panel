@@ -299,7 +299,7 @@ const QuotationsList = (props: MyComponentProps) => {
                   quotationData
                     .filter(
                       (item) =>
-                        item.status === "pending" || item.status === "cancelled"
+                        item.status === "pending" || item.status === "cancelled" || item.status === "active"
                     )
                     .map((item: any, index: number) => (
                       <div key={item._id} className="nk-tb-item">
