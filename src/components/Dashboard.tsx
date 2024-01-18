@@ -512,6 +512,19 @@ function Dashboard(props: MyComponentProps) {
                                               </a>
                                             </li>
                                           )}
+                                          <li>
+                                            <a
+                                              onClick={() =>
+                                                viewQuotationDetail(
+                                                  item._id,
+                                                  item.type
+                                                )
+                                              }
+                                            >
+                                              <em className="icon ni ni-eye"></em>
+                                              <span>View Quotation</span>
+                                            </a>
+                                          </li>
                                         </ul>
                                       </div>
                                     </div>
