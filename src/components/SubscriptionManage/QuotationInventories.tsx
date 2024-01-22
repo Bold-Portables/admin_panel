@@ -8,7 +8,9 @@ import { getFormatedDate, replaceHyphenCapitolize } from "../../Helper";
 import { Link} from "react-router-dom";
 import { saveInventory } from "../../Redux/Reducers/appSlice";
 import { useDispatch } from "react-redux";
+import { saveQuotation } from "../../Redux/Reducers/appSlice";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { RootState } from "../../Redux/rootReducer";
 
 interface MyComponentProps {
@@ -18,6 +20,7 @@ interface MyComponentProps {
 function QuotationInventoryList(props: MyComponentProps) {
   const { setLoading } = props;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [listData, setListData] = useState<any[]>([]);
   const [totalCount, setTotalCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
@@ -105,6 +108,18 @@ function QuotationInventoryList(props: MyComponentProps) {
       return quotationType;
     }
   };
+
+  const viewQuotationDetail = (_id: string, type: string) => {
+    dispatch(saveQuotation({ _id, type }));
+    navigate("/quotation-detail");
+  };
+
+  function getSVGContentFromDataURL(dataUrl:string) {
+    const prefix = "data:image/svg+xml;utf8,";
+    return dataUrl.startsWith(prefix)
+      ? decodeURIComponent(dataUrl.slice(prefix.length))
+      : null;
+  }
 
   return (
     <>
@@ -209,12 +224,15 @@ function QuotationInventoryList(props: MyComponentProps) {
                         </div>
                         {item.status === "active" && (
                           <div className="nk-tb-col tb-col-lg capitalize">
-                            <span className="tb-status text-info">
-                              {getSeconLastdValueWithStr(
-                                item?.qrCodeValue,
-                                item.status
-                              )}
-                            </span>
+                              <a
+                                onClick={() =>
+                                  viewQuotationDetail(item.quote_id, item.quote_type)
+                                }
+                              >
+                              <span className="tb-status text-primary">
+                                {item.quote_id?.slice(-8)?.toUpperCase()}
+                              </span>
+                            </a>
                           </div>
                         )}
                         <div className="nk-tb-col tb-col-lg">
@@ -232,11 +250,10 @@ function QuotationInventoryList(props: MyComponentProps) {
                           </span>
                         </div>
                         <div className="nk-tb-col">
-                          <img
-                            style={{ width: "40%" }}
-                            src={item?.qrCode}
-                            alt="QR Code"
-                          />
+                            <div className=" hide-sm-nk">
+                              <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
+                              {/* <p>{item.qrId}</p> */}
+                            </div>
                         </div>
                       </div>
                     ))}
