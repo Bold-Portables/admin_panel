@@ -27,6 +27,7 @@ function InventoryList(props: MyComponentProps) {
   const [selectedItems, setSelectedItems] = useState<any[]>([]);
   const [quotationId, setQuotationId] = useState<string>("");
   const [quotationType, setQuotationType] = useState<string>("");
+  const [coordinator, setCoordinator] = useState<object>({});
   const [assignModal, setAssignModal] = useState<boolean>(false);
   const [categoriesData, setCategoriesData] = useState([]);
   const [inventoryTypesData, setInventoryTypesData] = useState([]);
@@ -106,11 +107,32 @@ function InventoryList(props: MyComponentProps) {
     const quotation_Type = params.get("quoteType");
     if (quotation_Id) {
       setQuotationId(quotation_Id.toString());
+      getQuotationDetailsData(quotation_Id);
     }
     if (quotation_Type) {
       setQuotationType(quotation_Type?.toLowerCase().toString());
     }
   }, []);
+
+  const getQuotationDetailsData = async (QuotationId: string) => {
+    const payload = { quote_id: QuotationId };
+    await authAxios()
+      .post("/quotation/get-specific-quotation-from-all-collection", payload)
+      .then(
+        (response) => {
+          if (response.data.status === 1) {
+            const resData = response.data.data.quotation;
+            setCoordinator(resData.coordinator)
+          }
+        },
+        (error) => {
+          toast.error(error.response.data.message);
+        }
+      )
+      .catch((error) => {
+        console.log("errorrrr", error);
+      });
+  };
 
   const getInventoryListData = async () => {
     setLoading(true);
@@ -148,6 +170,7 @@ function InventoryList(props: MyComponentProps) {
       _ids: [...selectedItems],
       quoteId: quotationId,
       quoteType: quotationType,
+      coordinator: coordinator,
     };
     setLoading(true);
     await authAxios()
