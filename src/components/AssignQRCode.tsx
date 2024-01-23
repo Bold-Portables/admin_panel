@@ -179,10 +179,11 @@ function InventoryList(props: MyComponentProps) {
         (response) => {
           setLoading(false);
           if (response.data.status === 1) {
-            const resData = response.data;
+            const updatedList = [...listData].filter((item: any) => !selectedItems.includes(item._id))
             toast.success(response.data.message);
             setSelectedItems([]);
             setAssignModal(false);
+            setListData(updatedList)
           } else {
             toast.error(response.data.message);
           }
