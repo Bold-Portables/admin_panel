@@ -422,6 +422,9 @@ const getFilterDetails=(filterName:string)=>{
                     <div className="nk-tb-col">
                       <span>Assigned To</span>
                     </div>
+                    <div className="nk-tb-col">
+                      <span>Quote Type</span>
+                    </div>
                     <div className="nk-tb-col hide-sm-nk">
                       <span className="sub-text">Created At</span>
                     </div>
@@ -465,11 +468,19 @@ const getFilterDetails=(filterName:string)=>{
                         </div>
                         {item.status === "active" ? (
                           <div className="nk-tb-col capitalize">
+                            <span className="tb-status">
+                              {item.coordinator}
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="nk-tb-col capitalize">
+                            <span className="tb-status text-warning">N/A</span>
+                          </div>
+                        )}
+                        {item.status === "active" ? (
+                          <div className="nk-tb-col capitalize">
                             <span className="tb-status text-info">
-                              {getQuotationTypeByLink(
-                                item?.qrCodeValue,
-                                item.status
-                              )}
+                              {item.quote_type}
                             </span>
                           </div>
                         ) : (
