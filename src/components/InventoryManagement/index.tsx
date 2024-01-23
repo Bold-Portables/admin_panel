@@ -93,12 +93,21 @@ function InventoryList(props: MyComponentProps) {
     setMoveModal(true);
   };
 
-  function getSVGContentFromDataURL(dataUrl:string) {
+  function getSVGContentFromDataURL(dataUrl: string) {
     const prefix = "data:image/svg+xml;utf8,";
-    return dataUrl.startsWith(prefix)
-      ? decodeURIComponent(dataUrl.slice(prefix.length))
-      : null;
-  }
+
+    const svgContent = dataUrl.startsWith(prefix)
+        ? decodeURIComponent(dataUrl.slice(prefix.length))
+        : null;
+
+    if (svgContent) {
+        const modifiedSVGContent = svgContent.replace(/<text.*?<\/text>/g, '');
+
+        return modifiedSVGContent;
+    }
+
+    return null;
+  };
 
   const handleDeleteItem = async () => {
     setLoading(true);

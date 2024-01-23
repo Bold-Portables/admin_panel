@@ -114,12 +114,21 @@ function QuotationInventoryList(props: MyComponentProps) {
     navigate("/quotation-detail");
   };
 
-  function getSVGContentFromDataURL(dataUrl:string) {
+  function getSVGContentFromDataURL(dataUrl: string) {
     const prefix = "data:image/svg+xml;utf8,";
-    return dataUrl.startsWith(prefix)
-      ? decodeURIComponent(dataUrl.slice(prefix.length))
-      : null;
-  }
+
+    const svgContent = dataUrl.startsWith(prefix)
+        ? decodeURIComponent(dataUrl.slice(prefix.length))
+        : null;
+
+    if (svgContent) {
+        const modifiedSVGContent = svgContent.replace(/<text.*?<\/text>/g, '');
+
+        return modifiedSVGContent;
+    }
+
+    return null;
+  };
 
   return (
     <>
@@ -252,7 +261,7 @@ function QuotationInventoryList(props: MyComponentProps) {
                         <div className="nk-tb-col">
                             <div className=" hide-sm-nk">
                               <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
-                              {/* <p>{item.qrId}</p> */}
+                              { <p className="text-center">{item.qrId}</p> }
                             </div>
                         </div>
                       </div>

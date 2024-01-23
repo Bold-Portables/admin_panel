@@ -66,12 +66,22 @@ function InventoryList(props: MyComponentProps) {
         console.log("errorrrr", error);
       });
   };
-  function getSVGContentFromDataURL(dataUrl:string) {
+
+  function getSVGContentFromDataURL(dataUrl: string) {
     const prefix = "data:image/svg+xml;utf8,";
-    return dataUrl.startsWith(prefix) 
+
+    const svgContent = dataUrl.startsWith(prefix)
         ? decodeURIComponent(dataUrl.slice(prefix.length))
         : null;
-  }
+
+    if (svgContent) {
+        const modifiedSVGContent = svgContent.replace(/<text.*?<\/text>/g, '');
+
+        return modifiedSVGContent;
+    }
+
+    return null;
+  };
 
   const getInventoryTypeData = async () => {
     setLoading(true);
@@ -493,7 +503,8 @@ function InventoryList(props: MyComponentProps) {
                           </span>
                         </div>
                         <div className="nk-tb-col tb-col-md">
-                        <div dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
+                          <div dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
+                          { <p className="text-center">{item.qrId}</p> }
                         </div>
                       </div>
                     ))}
