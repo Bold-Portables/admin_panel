@@ -22,7 +22,7 @@ const InventoryDetails = (props: MyComponentProps) => {
       const match = str.match(quoteIdRegex);
       // Check if there is a match and get the value
       const quoteIdValue = match ? match[1] : null;
-      getQuotationDetailsData(inventory.quote_type);
+      getQuotationDetailsData(inventory.quote_id);
     }
   }, []);
 
