@@ -478,7 +478,7 @@ const getFilterDetails=(filterName:string)=>{
                         {item.status === "active" ? (
                           <div className="nk-tb-col capitalize">
                             <span className="tb-status">
-                              {item.coordinator}
+                              {item.coordinator.name}
                             </span>
                           </div>
                         ) : (

@@ -132,7 +132,7 @@ function InventoryList(props: MyComponentProps) {
         (response) => {
           if (response.data.status === 1) {
             const resData = response.data.data.quotation;
-            setCoordinator(resData.coordinator)
+            setCoordinator(resData.user)
           }
         },
         (error) => {
