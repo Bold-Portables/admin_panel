@@ -1083,7 +1083,7 @@ function EditEventQuotation(props: MyComponentProps) {
                             className="form-label"
                             htmlFor="personal-email"
                           >
-                            Pickup Price
+                            Delivery Fee
                           </label>
                           <input
                             min={0}
@@ -1100,9 +1100,9 @@ function EditEventQuotation(props: MyComponentProps) {
                         <div className="form-group">
                           <label
                             className="form-label"
-                            htmlFor="Pickup Price"
+                            htmlFor="Delivery Fee"
                           >
-                            Pickup Price <span>{servicesPrice.pickUpPrice}</span>
+                            Delivery Fee <span>${servicesPrice.pickUpPrice}</span>
                           </label>
                         </div>
                       </div>
@@ -1111,9 +1111,20 @@ function EditEventQuotation(props: MyComponentProps) {
                         <div className="form-group">
                           <label
                             className="form-label"
-                            htmlFor="Pickup Price"
+                            htmlFor="Delivery Fee"
                           >
-                          Total Price <span>{calculateAnObjValues(servicesPrice)}</span>
+                          Monthly Invoice <span>${calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice}</span>
+                          </label>
+                        </div>
+                      </div>
+
+                      <div className="col-md-3 total-price">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="Delivery Fee"
+                          >
+                          Initial Invoice <span>${calculateAnObjValues(servicesPrice)}</span>
                           </label>
                         </div>
                       </div>
