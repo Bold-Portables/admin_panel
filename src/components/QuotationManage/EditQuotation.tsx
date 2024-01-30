@@ -925,7 +925,7 @@ function EditQuotation(props: MyComponentProps) {
                             className="form-label"
                             htmlFor="personal-email"
                           >
-                            Pickup Price
+                            Delivery Fee
                           </label>
                           <input
                             min={1}
@@ -943,9 +943,19 @@ function EditQuotation(props: MyComponentProps) {
                         <div className="form-group">
                           <label
                             className="form-label"
-                            htmlFor="Pickup Price"
+                            htmlFor="Delivery Fee"
                           >
-                            Pickup Price <span>{servicesPrice.pickUpPrice}</span>
+                            Delivery Fee <span>${servicesPrice.pickUpPrice}</span>
+                          </label>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="Delivery Fee"
+                          >
+                            Monthly Invoice <span>${calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice}</span>
                           </label>
                         </div>
                       </div>
@@ -953,9 +963,9 @@ function EditQuotation(props: MyComponentProps) {
                         <div className="form-group">
                           <label
                             className="form-label"
-                            htmlFor="Pickup Price"
+                            htmlFor="Delivery Fee"
                           >
-                            Total Price <span>{calculateAnObjValues(servicesPrice)}</span>
+                            Initial Invoice <span>${calculateAnObjValues(servicesPrice)}</span>
                           </label>
                         </div>
                       </div>
