@@ -28,14 +28,6 @@ function EditSubscription(props: MyComponentProps) {
     closeModal,
   } = props;
 
-  const [activeStep, setActiveStep] = useState<number>(1);
-
-
-  const [coordinator, setCoordinator] = useState({
-    name: "",
-    email: "",
-    cellNumber: "",
-  });
 
   const [subscription, setSubscription] = useState({
     quotationType: "",
@@ -95,20 +87,10 @@ function EditSubscription(props: MyComponentProps) {
       });
   };
 
-//   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setQuotation((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleChangeCoordinator = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setCoordinator((prev) => ({ ...prev, [name]: value }));
-//   };
-
-//   const handleChangeServicePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
-//     const { name, value } = e.target;
-//     setServicesPrice((prev) => ({ ...prev, [name]: parseInt(value) }));
-//   };
+  const handleChangeSubscription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setSubscriptionPrice((prev) => ({ ...prev, [name]: value }));
+  };
 
   const handleSubmit = async (requestType: string) => {
     console.log('submit called')
@@ -170,7 +152,7 @@ function EditSubscription(props: MyComponentProps) {
       style={{ display: modal ? "block" : "none" }}
       role="dialog"
     >
-      <div className="modal-dialog modal-lg modal-dialog-top" role="document">
+      <div className="modal-dialog modal-md modal-dialog-top" role="document">
         <div className="modal-content">
           <a
             onClick={() => closeModal(false)}
@@ -181,222 +163,25 @@ function EditSubscription(props: MyComponentProps) {
           </a>
           <div className="modal-body modal-body-md">
             <h5 className="title">Edit Subscription</h5>
-            <ul className="nk-nav nav nav-tabs">
-              <li className="nav-item">
-                <a
-                  className={`nav-link ${activeStep === 1 ? "active" : ""} `}
-                  data-bs-toggle="tab"
-                  onClick={() => setActiveStep(1)}
-                >
-                  Personal
-                </a>
-              </li>
-              <li className="nav-item">
-                <a
-                  className={`nav-link ${activeStep === 2 ? "active" : ""} `}
-                  data-bs-toggle="tab"
-                  onClick={() => setActiveStep(2)}
-                >
-                  Quotation
-                </a>
-              </li>
-            </ul>
+            <hr></hr>
+         
             <div className="tab-content">
-              {activeStep === 1 && (
+              {(
                 <div className="tab-pane active">
                   <form>
                     <div className="row gy-4">
-                      {/* <div className="col-md-6">
-                        <div className="form-group">
-                          <label className="form-label" htmlFor="full-name">
-                            User Name
-                          </label>
-                          <input
-                            value={coordinator.name}
-                            onChange={handleChangeCoordinator}
-                            type="text"
-                            disabled
-                            name="name"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="User name"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
+                    <div className="col-md-5">
                         <div className="form-group">
                           <label
                             className="form-label"
                             htmlFor="personal-email"
                           >
-                            Email Address
+                            Price per month
                           </label>
                           <input
                             disabled
-                            value={coordinator.email}
-                            onChange={handleChangeCoordinator}
-                            type="email"
-                            name="email"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Email address"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Phone Number
-                          </label>
-                          <input
-                            disabled
-                            value={coordinator.cellNumber}
-                            onChange={handleChangeCoordinator}
-                            type="text"
-                            name="cellNumber"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Phone number"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Designated Workers
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.designatedWorkers ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="designatedWorkers"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Designated workers"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Worker Types
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.workerTypes}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="workerTypes"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Worker Types"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Placement Date
-                          </label>
-                          <input
-                            disabled
-                            value={moment(quotation.placementDate).format(
-                              "MMMM Do YYYY"
-                            )}
-                            type="text"
-                            name="placementDate"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Placement Date"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Male workers
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.maleWorkers}
-                            onChange={handleChangeQuotation}
-                            type="number"
-                            name="maleWorkers"
-                            className="form-control"
-                            id="maleWorkers"
-                            placeholder="DisMale workerstance"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Female workers
-                          </label>
-                          <input
-                            min={0}
-                            disabled
-                            value={quotation.femaleWorkers}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="deliveryPrice"
-                            className="form-control"
-                            id="femaleWorkers"
-                            placeholder="Female workers"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-4">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Total workers
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.totalWorkers}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Maximum workers"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Distance
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.distanceFromKelowna}
-                            onChange={handleChangeQuotation}
+                            value={subscriptionPrice.standardPrice}
+                            onChange={handleChangeSubscription}
                             type="text"
                             name="distanceFromKelowna"
                             className="form-control"
@@ -405,18 +190,18 @@ function EditSubscription(props: MyComponentProps) {
                           />
                         </div>
                       </div>
-                      <div className="col-md-3">
+                      <div className="col-md-5">
                         <div className="form-group">
                           <label
                             className="form-label"
                             htmlFor="personal-email"
                           >
-                            Cost
+                            Upgrade amount
                           </label>
                           <input
                             min={0}
-                            value={servicesPrice.workersCost}
-                            onChange={handleChangeServicePrice}
+                            value={subscriptionPrice.upgradeAmount}
+                            onChange={handleChangeSubscription}
                             type="number"
                             name="workersCost"
                             className="form-control"
@@ -425,503 +210,30 @@ function EditSubscription(props: MyComponentProps) {
                           />
                         </div>
                       </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Weekly Hours
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.weeklyHours}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="weeklyHours"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Weekly hours"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Weekly Hours Cost
-                          </label>
-                          <input
-                            min={0}
-                            value={servicesPrice.weeklyHoursCost}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="weeklyHoursCost"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div> */}
-                      <div className="col-12">
-                        <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                          <li>
-                            <button
-                              type="button"
-                              onClick={() => setActiveStep(2)}
-                              className="btn btn-primary"
+
+                      <div>
+                        <div className="col-md-5 total-price">
+                            <div className="form-group">
+                            <label
+                                className="form-label"
+                                htmlFor="Delivery Fee"
                             >
-                              Next
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              onClick={() => closeModal(false)}
-                              type="button"
-                              data-bs-dismiss="modal"
-                              className="link link-light"
-                            >
-                              Cancel
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
-                    </div>
-                  </form>
-                </div>
-              )}
-              {activeStep === 2 && (
-                <div className="tab-pane active">
-                  <form>
-                    <div className="row gy-4">
-                      {/* <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Use At Night
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.useAtNight ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="useAtNight"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Cost
-                          </label>
-                          <input
-                            min={0}
-                            disabled={!quotation.useAtNight}
-                            value={servicesPrice.useAtNightCost}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="useAtNightCost"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Use In Winter
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.useInWinter ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Cost
-                          </label>
-                          <input
-                            min={0}
-                            value={servicesPrice.useInWinterCost}
-                            disabled={!quotation.useInWinter}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="useInWinterCost"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Number of units
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.numUnits}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="numUnits"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Number of units"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Cost
-                          </label>
-                          <input
-                            min={0}
-                            disabled={quotation.numUnits <= 0}
-                            value={servicesPrice.numberOfUnitsCost}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="numberOfUnitsCost"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
+                                Next invoice <span>${0}</span>
+                            </label>
+                            </div>
                         </div>
                       </div>
 
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Date Till Use
-                          </label>
-                          <input
-                            disabled
-                            value={moment(quotation.dateTillUse).format(
-                              "MMMM Do YYYY"
-                            )}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="dateTillUse"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Date till use"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Handwashing
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.handwashing ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="handwashing"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Cost
-                          </label>
-                          <input
-                            min={0}
-                            value={servicesPrice.handWashingCost}
-                            disabled={!quotation.handwashing}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="handWashingCost"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Hand Sanitizer Pump
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.handSanitizerPump ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Cost
-                          </label>
-                          <input
-                            min={0}
-                            value={servicesPrice.handSanitizerPumpCost}
-                            disabled={!quotation.handSanitizerPump}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="handSanitizerPumpCost"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Twice Weekly Service
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.twiceWeeklyService ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Cost
-                          </label>
-                          <input
-                            min={0}
-                            disabled={!quotation.twiceWeeklyService}
-                            value={servicesPrice.twiceWeeklyServicing}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="twiceWeeklyServicing"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Special Requirements
-                          </label>
-                          <input
-                            value={quotation.special_requirements}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Special Requirements"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Cost
-                          </label>
-                          <input
-                            min={0}
-                            value={servicesPrice.specialRequirementsCost}
-                            disabled={!quotation.special_requirements}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="specialRequirementsCost"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Service Frequency
-                          </label>
-                          <input
-                            disabled
-                            value={quotation.serviceFrequency}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="serviceFrequency"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Service Frequency"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Cost
-                          </label>
-                          <input
-                            min={0}
-                            value={servicesPrice.serviceFrequencyCost}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="serviceFrequencyCost"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Delivery Fee
-                          </label>
-                          <input
-                            min={1}
-                            value={servicesPrice.pickUpPrice}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="pickUpPrice"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter pickup Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="Delivery Fee"
-                          >
-                            Delivery Fee <span>${servicesPrice.pickUpPrice}</span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-md-3">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="Delivery Fee"
-                          >
-                            Monthly Invoice <span>${calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice}</span>
-                          </label>
-                        </div>
-                      </div>
-                      <div className="col-md-3 total-price">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="Delivery Fee"
-                          >
-                            Initial Invoice <span>${calculateAnObjValues(servicesPrice)}</span>
-                          </label>
-                        </div>
-                      </div> */}
+
                       <div className="col-12">
                         <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                          <li>
-                            <button
-                              type="submit"
-                              onClick={() => setActiveStep(1)}
-                              className="btn btn-primary"
-                            >
-                              Back
-                            </button>
-                          </li>
                           <li>
                             <button
                               type="button"
                               onClick={() => handleSubmit("save")}
                               className="btn btn-success"
                             >
-                              Save Invoice
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              type="button"
-                              onClick={() => handleSubmit("send invoice")}
-                              className="btn btn-warning"
-                            >
-                              Send Invoice
+                              Update
                             </button>
                           </li>
                           <li>
