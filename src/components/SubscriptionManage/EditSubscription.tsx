@@ -46,8 +46,6 @@ function EditSubscription(props: MyComponentProps) {
     getSubscriptionData();
   }, []);
 
-  const userFields = ["name", "email", "cellNumber"];
-
   const subscriptionFields = [
     "upgradeAmount",
     "standardPrice",

@@ -41,6 +41,7 @@ function SubscriptionList(props: MyComponentProps) {
   const [itemsPerPage, setItemPerPage] = useState<number>(10);
   const [saveLocationModal, setSaveLocationModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
+  const [editSubscriptionModal, setEditSubscriptionModal] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState("");
   const [statusName, setStatusName] = useState("");
   const [statusLabel, setStatusLabel] = useState("Status");
@@ -170,6 +171,10 @@ function SubscriptionList(props: MyComponentProps) {
     dispatch(saveQuotation({ _id, type }));
     navigate("/quotation-inventories");
   };
+
+  const handleUpdateSubscription = () => {
+    setEditSubscriptionModal(true);
+  }
 
   return (
     <>
@@ -463,12 +468,7 @@ function SubscriptionList(props: MyComponentProps) {
                                     {item.status === "ACTIVE" && (
                                       <li>
                                         <a
-                                          onClick={() =>
-                                            viewQuotationInventory(
-                                              item.quotationId,
-                                              item.quotationType
-                                            )
-                                          }
+                                          onClick={handleUpdateSubscription}
                                         >
                                           <em className="icon ni ni-coin-alt"></em>
                                           <span>Update Subscription</span>
@@ -503,8 +503,8 @@ function SubscriptionList(props: MyComponentProps) {
       {(
         <EditSubscription
           subscriptionId={'65b7c2bbe257cecdc82292e4'}
-          modal={editModal}
-          closeModal={(isModal: boolean) => setEditModal(isModal)}
+          modal={editSubscriptionModal}
+          closeModal={(isModal: boolean) => setEditSubscriptionModal(isModal)}
         />
       )}
 
