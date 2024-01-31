@@ -43,6 +43,7 @@ function SubscriptionList(props: MyComponentProps) {
   const [editModal, setEditModal] = useState<boolean>(false);
   const [editSubscriptionModal, setEditSubscriptionModal] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState("");
+  const [subscription, setSubscription] = useState("");
   const [statusName, setStatusName] = useState("");
   const [statusLabel, setStatusLabel] = useState("Status");
   const [trackingID, setTrackingID] = useState("");
@@ -172,7 +173,9 @@ function SubscriptionList(props: MyComponentProps) {
     navigate("/quotation-inventories");
   };
 
-  const handleUpdateSubscription = () => {
+  const handleUpdateSubscription = (data: any) => {
+    setSubscription(data);
+    // console.log(data)
     setEditSubscriptionModal(true);
   }
 
@@ -468,7 +471,7 @@ function SubscriptionList(props: MyComponentProps) {
                                     {item.status === "ACTIVE" && (
                                       <li>
                                         <a
-                                          onClick={handleUpdateSubscription}
+                                          onClick={() => handleUpdateSubscription(item)}
                                         >
                                           <em className="icon ni ni-coin-alt"></em>
                                           <span>Update Subscription</span>
@@ -502,7 +505,7 @@ function SubscriptionList(props: MyComponentProps) {
       </div>
       {(
         <EditSubscription
-          subscriptionId={'65b7c2bbe257cecdc82292e4'}
+          subscription={subscription}
           modal={editSubscriptionModal}
           closeModal={(isModal: boolean) => setEditSubscriptionModal(isModal)}
         />

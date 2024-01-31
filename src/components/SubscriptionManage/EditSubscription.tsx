@@ -7,6 +7,15 @@ import moment from "moment";
 import { socketService } from "../../config/socketService";
 
 // Represents price per month. Standard price is the default, upgraded price is added based on service reqs
+interface Subscription {
+  _id: string;
+  user: any;
+  quotationId: any;
+  quotationType: any;
+  subscription: string;
+  status: string;
+}
+
 interface SubscriptionPrice {
     upgradeAmount: number;
     standardPrice: number;
@@ -15,7 +24,7 @@ interface SubscriptionPrice {
 
 interface MyComponentProps {
 //   setLoading: (isComponentLoading: boolean) => void;
-  subscriptionId: string;
+  subscription: Subscription;
   modal: boolean;
   closeModal: (isModal: boolean) => void;
 }
@@ -23,18 +32,18 @@ interface MyComponentProps {
 function EditSubscription(props: MyComponentProps) {
   const {
     // setLoading,
-    subscriptionId,
+    subscription,
     modal,
     closeModal,
   } = props;
 
 
-  const [subscription, setSubscription] = useState({
-    quotationType: "",
-    quotationId: "",
-    subscription: "",
-    status: "",
-  });
+  // const [subscription, setSubscription] = useState({
+  //   quotationType: "",
+  //   quotationId: "",
+  //   subscription: "",
+  //   status: "",
+  // });
 
   const [subscriptionPrice, setSubscriptionPrice] = useState<SubscriptionPrice>({
     upgradeAmount: 0,
@@ -43,7 +52,7 @@ function EditSubscription(props: MyComponentProps) {
   });
 
   useEffect(() => {
-    getSubscriptionData();
+    // getSubscriptionData();
   }, []);
 
   const subscriptionFields = [
@@ -52,38 +61,38 @@ function EditSubscription(props: MyComponentProps) {
     "upgradedPrice",
   ];
 
-  const getSubscriptionData = async () => {
-    // setLoading(true);
-    // const payload = { subscription_id: subscriptionId };
-    await authAxios()
-      .get(`/payment/subscription/${subscriptionId}`)
-      .then(
-        (response) => {
-        //   setLoading(false);
-          if (response.data.status === 1) {
-            console.log(response)
-            // const resCoordinateData = response.data.data.quotation?.coordinator;
-            // const resData = response.data.data.quotation;
-            // const costDetails = response.data.data.quotation?.costDetails;
+  // const getSubscriptionData = async () => {
+  //   // setLoading(true);
+  //   // const payload = { subscription_id: subscription._id };
+  //   await authAxios()
+  //     .get(`/payment/subscription/${subscrip}`)
+  //     .then(
+  //       (response) => {
+  //       //   setLoading(false);
+  //         if (response.data.status === 1) {
+  //           console.log(response)
+  //           // const resCoordinateData = response.data.data.quotation?.coordinator;
+  //           // const resData = response.data.data.quotation;
+  //           // const costDetails = response.data.data.quotation?.costDetails;
         
-            // update input fields with data
-            subscriptionFields.forEach((field) => {
-                setSubscriptionPrice((prev) => ({
-                ...prev,
-                [field]: 0
-              }));
-            });
-          }
-        },
-        (error) => {
-        //   setLoading(false);
-          toast.error(error.response.data.message);
-        }
-      )
-      .catch((error) => {
-        console.log("errorrrr", error);
-      });
-  };
+  //           // update input fields with data
+  //           subscriptionFields.forEach((field) => {
+  //               setSubscriptionPrice((prev) => ({
+  //               ...prev,
+  //               [field]: 0
+  //             }));
+  //           });
+  //         }
+  //       },
+  //       (error) => {
+  //       //   setLoading(false);
+  //         toast.error(error.response.data.message);
+  //       }
+  //     )
+  //     .catch((error) => {
+  //       console.log("errorrrr", error);
+  //     });
+  // };
 
   const handleChangeSubscription = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
