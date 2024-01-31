@@ -12,6 +12,7 @@ import { CSVLink } from "react-csv";
 import ExportConfirmationModal from "../../Common/ConfirmExportModal";
 import { saveInvoiceId, saveQuotation } from "../../Redux/Reducers/appSlice";
 import { useDispatch } from "react-redux";
+import EditSubscription from "./EditSubscription";
 
 interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
@@ -441,7 +442,9 @@ function SubscriptionList(props: MyComponentProps) {
                                         <span>View Invoice</span>
                                       </a>
                                     </li>
-                                    {item?.assignedInventoriesCount > 0 && (
+
+                                    {item.status === "ACTIVE" &&
+                                      item?.assignedInventoriesCount > 0 && (
                                       <li>
                                         <a
                                           onClick={() =>
@@ -451,11 +454,28 @@ function SubscriptionList(props: MyComponentProps) {
                                             )
                                           }
                                         >
-                                          <em className="icon ni ni-eye"></em>
+                                          <em className="icon ni ni-qr"></em>
                                           <span>View Inventory</span>
                                         </a>
                                       </li>
                                     )}
+
+                                    {item.status === "ACTIVE" && (
+                                      <li>
+                                        <a
+                                          onClick={() =>
+                                            viewQuotationInventory(
+                                              item.quotationId,
+                                              item.quotationType
+                                            )
+                                          }
+                                        >
+                                          <em className="icon ni ni-coin-alt"></em>
+                                          <span>Update Subscription</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                  
                                   </ul>
                                 </div>
                               </div>
@@ -480,6 +500,14 @@ function SubscriptionList(props: MyComponentProps) {
           </div>
         </div>
       </div>
+      {(
+        <EditSubscription
+          subscriptionId={'65b7c2bbe257cecdc82292e4'}
+          modal={editModal}
+          closeModal={(isModal: boolean) => setEditModal(isModal)}
+        />
+      )}
+
       {saveLocationModal && (
         <SaveLocation
           invoiceData={invoiceData}
