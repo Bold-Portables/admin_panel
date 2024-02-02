@@ -17,6 +17,7 @@ interface Subscription {
 }
 
 interface MyComponentProps {
+  setLoading: (isComponentLoading: boolean) => void;
   subscription: Subscription;
   modal: boolean;
   closeModal: (isModal: boolean) => void;
@@ -24,6 +25,7 @@ interface MyComponentProps {
 
 function EditSubscription(props: MyComponentProps) {
   const {
+    setLoading,
     subscription,
     modal,
     closeModal,
@@ -39,59 +41,38 @@ function EditSubscription(props: MyComponentProps) {
     setUpgradeAmount(value);
   };
 
-  const handleSubmit = async (requestType: string) => {
-    console.log('submit called')
-    // let payload: any = { costDetails: servicesPrice };
-    // if (requestType === "save") {
-    //   payload["type"] = "save";
-    // }
-    // let endPoint: string = "quotation/update-quotation-for-construction";
-    // if (quotationType === "construction") {
-    //   endPoint = "quotation/update-quotation-for-construction";
-    // } else if (quotationType === "disaster-relief") {
-    //   endPoint = "quotation/update-quotation-for-disaster-relief";
-    // } else if (quotationType === "farm-orchard-winery") {
-    //   endPoint = "quotation/update-quotation-for-farm-orchard-winery";
-    // } else if (quotationType === "personal-or-business") {
-    //   endPoint = "quotation/update-quotation-for-personal-business-site";
-    // } else if (quotationType === "recreational-site") {
-    //   endPoint = "quotation/update-quotation-for-recreational-site";
-    // }
-    // setLoading(true);
-    // await authAxios()
-    //   .put(`/${endPoint}/${quotationId}`, payload)
-    //   .then(
-    //     (response) => {
-    //       setLoading(false);
-    //       if (response.data.status === 1) {
-    //         socketService.connect().then((socket: any) => {
-    //           socket.emit("update_quote", response.data.data);
-    //         });
-    //         toast.success(response.data.message);
-    //         closeModal(false);
-    //         // getListingData();
-    //       } else {
-    //         toast.error(response.data.message);
-    //       }
-    //     },
-    //     (error) => {
-    //       setLoading(false);
-    //       toast.error(error.response.data.message);
-    //       console.log(error);
-    //     }
-    //   )
-    //   .catch((error) => {
-    //     setLoading(false);
-    //     console.log("errorrrr", error);
-    //   });
+  const handleSubmit = async () => {
+    let payload: any = { upgradeAmount: upgradeAmount };
+  
+    setLoading(true);
+    
+    await authAxios()
+      .post(`payment/admin/subscription/${subscription._id}`, payload)
+      .then(
+        (response) => {
+          setLoading(false);
+          if (response.data.status === 1) {
+            // socketService.connect().then((socket: any) => {
+            //   socket.emit("update_quote", response.data.data);
+            // });
+            toast.success(response.data.message);
+            closeModal(false);
+            // getListingData();
+          } else {
+            toast.error(response.data.message);
+          }
+        },
+        (error) => {
+          setLoading(false);
+          toast.error(error.response.data.message);
+          console.log(error);
+        }
+      )
+      .catch((error) => {
+        setLoading(false);
+        console.log("errorrrr", error);
+      });
   };
-
- // Function to calculate the total price
-//  const calculateAnObjValues = (obj: ServicesPrice) => {
-//   const total = Object.values(obj).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-//   return total;
-// };
-
  
   return (
     <div
@@ -175,7 +156,7 @@ function EditSubscription(props: MyComponentProps) {
                           <li>
                             <button
                               type="button"
-                              onClick={() => handleSubmit("save")}
+                              onClick={() => handleSubmit()}
                               className="btn btn-success"
                             >
                               Update
