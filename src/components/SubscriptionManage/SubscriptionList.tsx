@@ -12,6 +12,7 @@ import { CSVLink } from "react-csv";
 import ExportConfirmationModal from "../../Common/ConfirmExportModal";
 import { saveInvoiceId, saveQuotation } from "../../Redux/Reducers/appSlice";
 import { useDispatch } from "react-redux";
+import EditSubscription from "./EditSubscription";
 
 interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
@@ -40,7 +41,9 @@ function SubscriptionList(props: MyComponentProps) {
   const [itemsPerPage, setItemPerPage] = useState<number>(10);
   const [saveLocationModal, setSaveLocationModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
+  const [editSubscriptionModal, setEditSubscriptionModal] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState("");
+  const [subscription, setSubscription] = useState("");
   const [statusName, setStatusName] = useState("");
   const [statusLabel, setStatusLabel] = useState("Status");
   const [trackingID, setTrackingID] = useState("");
@@ -169,6 +172,12 @@ function SubscriptionList(props: MyComponentProps) {
     dispatch(saveQuotation({ _id, type }));
     navigate("/quotation-inventories");
   };
+
+  const handleUpdateSubscription = (data: any) => {
+    setSubscription(data);
+    // console.log(data)
+    setEditSubscriptionModal(true);
+  }
 
   return (
     <>
@@ -441,7 +450,9 @@ function SubscriptionList(props: MyComponentProps) {
                                         <span>View Invoice</span>
                                       </a>
                                     </li>
-                                    {item?.assignedInventoriesCount > 0 && (
+
+                                    {item.status === "ACTIVE" &&
+                                      item?.assignedInventoriesCount > 0 && (
                                       <li>
                                         <a
                                           onClick={() =>
@@ -451,11 +462,23 @@ function SubscriptionList(props: MyComponentProps) {
                                             )
                                           }
                                         >
-                                          <em className="icon ni ni-eye"></em>
+                                          <em className="icon ni ni-qr"></em>
                                           <span>View Inventory</span>
                                         </a>
                                       </li>
                                     )}
+
+                                    {item.status === "ACTIVE" && (
+                                      <li>
+                                        <a
+                                          onClick={() => handleUpdateSubscription(item)}
+                                        >
+                                          <em className="icon ni ni-coin-alt"></em>
+                                          <span>Update Subscription</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                  
                                   </ul>
                                 </div>
                               </div>
@@ -480,6 +503,14 @@ function SubscriptionList(props: MyComponentProps) {
           </div>
         </div>
       </div>
+      {(
+        <EditSubscription
+          subscription={subscription}
+          modal={editSubscriptionModal}
+          closeModal={(isModal: boolean) => setEditSubscriptionModal(isModal)}
+        />
+      )}
+
       {saveLocationModal && (
         <SaveLocation
           invoiceData={invoiceData}
