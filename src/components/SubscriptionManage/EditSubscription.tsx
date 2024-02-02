@@ -6,24 +6,17 @@ import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import moment from "moment";
 import { socketService } from "../../config/socketService";
 
-// Represents price per month. Standard price is the default, upgraded price is added based on service reqs
 interface Subscription {
   _id: string;
   user: any;
-  quotationId: any;
-  quotationType: any;
+  monthlyCost: number;
+  upgradedCost: number;
+  deliveryCost: number;
   subscription: string;
   status: string;
 }
 
-interface SubscriptionPrice {
-    upgradeAmount: number;
-    standardPrice: number;
-    upgradedPrice: number;
-}
-
 interface MyComponentProps {
-//   setLoading: (isComponentLoading: boolean) => void;
   subscription: Subscription;
   modal: boolean;
   closeModal: (isModal: boolean) => void;
@@ -31,72 +24,19 @@ interface MyComponentProps {
 
 function EditSubscription(props: MyComponentProps) {
   const {
-    // setLoading,
     subscription,
     modal,
     closeModal,
   } = props;
 
+  const [upgradeAmount, setUpgradeAmount] = useState<string>('0');
 
-  // const [subscription, setSubscription] = useState({
-  //   quotationType: "",
-  //   quotationId: "",
-  //   subscription: "",
-  //   status: "",
-  // });
+  const handleUpgradeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
 
-  const [subscriptionPrice, setSubscriptionPrice] = useState<SubscriptionPrice>({
-    upgradeAmount: 0,
-    standardPrice: 0,
-    upgradedPrice: 0,
-  });
+    if(value === "") setUpgradeAmount('0');
 
-  useEffect(() => {
-    // getSubscriptionData();
-  }, []);
-
-  const subscriptionFields = [
-    "upgradeAmount",
-    "standardPrice",
-    "upgradedPrice",
-  ];
-
-  // const getSubscriptionData = async () => {
-  //   // setLoading(true);
-  //   // const payload = { subscription_id: subscription._id };
-  //   await authAxios()
-  //     .get(`/payment/subscription/${subscrip}`)
-  //     .then(
-  //       (response) => {
-  //       //   setLoading(false);
-  //         if (response.data.status === 1) {
-  //           console.log(response)
-  //           // const resCoordinateData = response.data.data.quotation?.coordinator;
-  //           // const resData = response.data.data.quotation;
-  //           // const costDetails = response.data.data.quotation?.costDetails;
-        
-  //           // update input fields with data
-  //           subscriptionFields.forEach((field) => {
-  //               setSubscriptionPrice((prev) => ({
-  //               ...prev,
-  //               [field]: 0
-  //             }));
-  //           });
-  //         }
-  //       },
-  //       (error) => {
-  //       //   setLoading(false);
-  //         toast.error(error.response.data.message);
-  //       }
-  //     )
-  //     .catch((error) => {
-  //       console.log("errorrrr", error);
-  //     });
-  // };
-
-  const handleChangeSubscription = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setSubscriptionPrice((prev) => ({ ...prev, [name]: value }));
+    setUpgradeAmount(value);
   };
 
   const handleSubmit = async (requestType: string) => {
@@ -187,8 +127,7 @@ function EditSubscription(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={subscriptionPrice.standardPrice}
-                            onChange={handleChangeSubscription}
+                            value={subscription.monthlyCost || ''}
                             type="text"
                             name="distanceFromKelowna"
                             className="form-control"
@@ -207,10 +146,10 @@ function EditSubscription(props: MyComponentProps) {
                           </label>
                           <input
                             min={0}
-                            value={subscriptionPrice.upgradeAmount}
-                            onChange={handleChangeSubscription}
+                            value={upgradeAmount}
+                            onChange={handleUpgradeAmount}
                             type="number"
-                            name="workersCost"
+                            name="upgradeAmount"
                             className="form-control"
                             id="inputEmail4"
                             placeholder="Enter Price"
@@ -225,12 +164,11 @@ function EditSubscription(props: MyComponentProps) {
                                 className="form-label"
                                 htmlFor="Delivery Fee"
                             >
-                                Next invoice <span>${0}</span>
+                                Next invoice <span>${(subscription.monthlyCost + parseInt(upgradeAmount) || subscription.monthlyCost)}</span>
                             </label>
                             </div>
                         </div>
                       </div>
-
 
                       <div className="col-12">
                         <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
