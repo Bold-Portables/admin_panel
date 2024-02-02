@@ -32,18 +32,24 @@ function EditSubscription(props: MyComponentProps) {
   } = props;
 
   const [upgradeAmount, setUpgradeAmount] = useState<string>('0');
+  const [description, setDescription] = useState<string>('');
 
   const handleUpgradeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-
-    if(value === "") setUpgradeAmount('0');
-
     setUpgradeAmount(value);
   };
 
+  const handleDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setDescription(value);
+  };
+
   const handleSubmit = async () => {
-    let payload: any = { upgradeAmount: upgradeAmount };
-  
+    let payload: any = { 
+      upgradeAmount: upgradeAmount, 
+      description: description 
+    };
+
     setLoading(true);
     
     await authAxios()
@@ -57,7 +63,6 @@ function EditSubscription(props: MyComponentProps) {
             // });
             toast.success(response.data.message);
             closeModal(false);
-            // getListingData();
           } else {
             toast.error(response.data.message);
           }
@@ -134,6 +139,26 @@ function EditSubscription(props: MyComponentProps) {
                             className="form-control"
                             id="inputEmail4"
                             placeholder="Enter Price"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-10">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Description
+                          </label>
+                          <input
+                            min={0}
+                            value={description}
+                            onChange={handleDescription}
+                            type="text"
+                            name="description"
+                            className="form-control"
+                            id="inputEmail4"
+                            placeholder="Enter a brief description..."
                           />
                         </div>
                       </div>
