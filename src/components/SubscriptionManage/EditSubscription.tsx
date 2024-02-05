@@ -6,92 +6,96 @@ import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import moment from "moment";
 import { socketService } from "../../config/socketService";
 
-interface Subscription {
-  _id: string;
-  user: any;
-  monthlyCost: number;
-  upgradedCost: number;
-  deliveryCost: number;
-  subscription: string;
-  status: string;
-}
-
 interface MyComponentProps {
-  subscription: Subscription;
+  setLoading: (isComponentLoading: boolean) => void;
+  subscriptionId: string;
   modal: boolean;
   closeModal: (isModal: boolean) => void;
 }
 
 function EditSubscription(props: MyComponentProps) {
   const {
-    subscription,
+    setLoading,
+    subscriptionId,
     modal,
     closeModal,
   } = props;
 
   const [upgradeAmount, setUpgradeAmount] = useState<string>('0');
+  const [description, setDescription] = useState<string>('');
+  const [subscription, setSubscription] = useState({
+    monthlyCost: 0,
+    upgradedCost: 0,
+  });
+
+  useEffect(() => {
+    getSubscriptionData();
+  }, []);
 
   const handleUpgradeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
-
-    if(value === "") setUpgradeAmount('0');
-
     setUpgradeAmount(value);
   };
 
-  const handleSubmit = async (requestType: string) => {
-    console.log('submit called')
-    // let payload: any = { costDetails: servicesPrice };
-    // if (requestType === "save") {
-    //   payload["type"] = "save";
-    // }
-    // let endPoint: string = "quotation/update-quotation-for-construction";
-    // if (quotationType === "construction") {
-    //   endPoint = "quotation/update-quotation-for-construction";
-    // } else if (quotationType === "disaster-relief") {
-    //   endPoint = "quotation/update-quotation-for-disaster-relief";
-    // } else if (quotationType === "farm-orchard-winery") {
-    //   endPoint = "quotation/update-quotation-for-farm-orchard-winery";
-    // } else if (quotationType === "personal-or-business") {
-    //   endPoint = "quotation/update-quotation-for-personal-business-site";
-    // } else if (quotationType === "recreational-site") {
-    //   endPoint = "quotation/update-quotation-for-recreational-site";
-    // }
-    // setLoading(true);
-    // await authAxios()
-    //   .put(`/${endPoint}/${quotationId}`, payload)
-    //   .then(
-    //     (response) => {
-    //       setLoading(false);
-    //       if (response.data.status === 1) {
-    //         socketService.connect().then((socket: any) => {
-    //           socket.emit("update_quote", response.data.data);
-    //         });
-    //         toast.success(response.data.message);
-    //         closeModal(false);
-    //         // getListingData();
-    //       } else {
-    //         toast.error(response.data.message);
-    //       }
-    //     },
-    //     (error) => {
-    //       setLoading(false);
-    //       toast.error(error.response.data.message);
-    //       console.log(error);
-    //     }
-    //   )
-    //   .catch((error) => {
-    //     setLoading(false);
-    //     console.log("errorrrr", error);
-    //   });
+  const handleDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { value } = e.target;
+    setDescription(value);
   };
 
- // Function to calculate the total price
-//  const calculateAnObjValues = (obj: ServicesPrice) => {
-//   const total = Object.values(obj).reduce((accumulator, currentValue) => accumulator + currentValue, 0);
-//   return total;
-// };
+  const getSubscriptionData = async () => {
+    setLoading(true);
+    await authAxios()
+      .get(`/payment/admin/subscription-detail/${subscriptionId}`)
+      .then(
+        (response) => {
+          setLoading(false);
+          if (response.data.status === 1) {
+            setSubscription(response.data.data.subscription)
+          }
+        },
+        (error) => {
+          setLoading(false);
+          toast.error(error.response.data.message);
+        }
+      )
+      .catch((error) => {
+        console.log("errorrrr", error);
+      });
+  };
 
+  const handleSubmit = async () => {
+    let payload: any = { 
+      upgradeAmount: upgradeAmount, 
+      description: description 
+    };
+
+    setLoading(true);
+    
+    await authAxios()
+      .post(`payment/admin/subscription/${subscriptionId}`, payload)
+      .then(
+        (response) => {
+          setLoading(false);
+          if (response.data.status === 1) {
+            setUpgradeAmount('0')
+            setDescription('')
+            toast.success(response.data.message);
+            closeModal(false);
+          } else {
+            toast.error(response.data.message);
+          }
+        },
+        (error) => {
+          setLoading(false);
+          toast.error(error.response.data.message);
+          console.log(error);
+        }
+      )
+      .catch((error) => {
+        setLoading(false);
+        console.log("errorrrr", error);
+      });
+  };
  
   return (
     <div
@@ -132,7 +136,7 @@ function EditSubscription(props: MyComponentProps) {
                             name="distanceFromKelowna"
                             className="form-control"
                             id="inputEmail4"
-                            placeholder="Distance"
+                            placeholder="Price per month"
                           />
                         </div>
                       </div>
@@ -156,6 +160,26 @@ function EditSubscription(props: MyComponentProps) {
                           />
                         </div>
                       </div>
+                      <div className="col-md-10">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Description
+                          </label>
+                          <input
+                            min={0}
+                            value={description}
+                            onChange={handleDescription}
+                            type="text"
+                            name="description"
+                            className="form-control"
+                            id="inputEmail4"
+                            placeholder="Enter a brief description..."
+                          />
+                        </div>
+                      </div>
 
                       <div>
                         <div className="col-md-5 total-price">
@@ -164,7 +188,7 @@ function EditSubscription(props: MyComponentProps) {
                                 className="form-label"
                                 htmlFor="Delivery Fee"
                             >
-                                Next invoice <span>${(subscription.monthlyCost + parseInt(upgradeAmount) || subscription.monthlyCost)}</span>
+                                Next invoice <span>${(subscription.upgradedCost + parseInt(upgradeAmount) || subscription.upgradedCost)}</span>
                             </label>
                             </div>
                         </div>
@@ -175,7 +199,7 @@ function EditSubscription(props: MyComponentProps) {
                           <li>
                             <button
                               type="button"
-                              onClick={() => handleSubmit("save")}
+                              onClick={() => handleSubmit()}
                               className="btn btn-success"
                             >
                               Update

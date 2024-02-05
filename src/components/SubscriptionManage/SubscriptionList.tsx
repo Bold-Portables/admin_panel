@@ -175,7 +175,6 @@ function SubscriptionList(props: MyComponentProps) {
 
   const handleUpdateSubscription = (data: any) => {
     setSubscription(data);
-    // console.log(data)
     setEditSubscriptionModal(true);
   }
 
@@ -471,7 +470,7 @@ function SubscriptionList(props: MyComponentProps) {
                                     {item.status === "ACTIVE" && (
                                       <li>
                                         <a
-                                          onClick={() => handleUpdateSubscription(item)}
+                                          onClick={() => handleUpdateSubscription(item._id)}
                                         >
                                           <em className="icon ni ni-coin-alt"></em>
                                           <span>Update Subscription</span>
@@ -503,9 +502,9 @@ function SubscriptionList(props: MyComponentProps) {
           </div>
         </div>
       </div>
-      {(
+      {editSubscriptionModal && (
         <EditSubscription
-          subscription={subscription}
+          subscriptionId={subscription}
           modal={editSubscriptionModal}
           closeModal={(isModal: boolean) => setEditSubscriptionModal(isModal)}
         />
