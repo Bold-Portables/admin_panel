@@ -6,19 +6,9 @@ import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import moment from "moment";
 import { socketService } from "../../config/socketService";
 
-interface Subscription {
-  _id: string;
-  user: any;
-  monthlyCost: number;
-  upgradedCost: number;
-  deliveryCost: number;
-  subscription: string;
-  status: string;
-}
-
 interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
-  subscription: Subscription;
+  subscriptionId: string;
   modal: boolean;
   closeModal: (isModal: boolean) => void;
 }
@@ -26,13 +16,21 @@ interface MyComponentProps {
 function EditSubscription(props: MyComponentProps) {
   const {
     setLoading,
-    subscription,
+    subscriptionId,
     modal,
     closeModal,
   } = props;
 
   const [upgradeAmount, setUpgradeAmount] = useState<string>('0');
   const [description, setDescription] = useState<string>('');
+  const [subscription, setSubscription] = useState({
+    monthlyCost: 0,
+    upgradedCost: 0,
+  });
+
+  useEffect(() => {
+    getSubscriptionData();
+  }, []);
 
   const handleUpgradeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
@@ -44,6 +42,27 @@ function EditSubscription(props: MyComponentProps) {
     setDescription(value);
   };
 
+  const getSubscriptionData = async () => {
+    setLoading(true);
+    await authAxios()
+      .get(`/payment/admin/subscription-detail/${subscriptionId}`)
+      .then(
+        (response) => {
+          setLoading(false);
+          if (response.data.status === 1) {
+            setSubscription(response.data.data.subscription)
+          }
+        },
+        (error) => {
+          setLoading(false);
+          toast.error(error.response.data.message);
+        }
+      )
+      .catch((error) => {
+        console.log("errorrrr", error);
+      });
+  };
+
   const handleSubmit = async () => {
     let payload: any = { 
       upgradeAmount: upgradeAmount, 
@@ -53,7 +72,7 @@ function EditSubscription(props: MyComponentProps) {
     setLoading(true);
     
     await authAxios()
-      .post(`payment/admin/subscription/${subscription._id}`, payload)
+      .post(`payment/admin/subscription/${subscriptionId}`, payload)
       .then(
         (response) => {
           setLoading(false);
@@ -61,6 +80,8 @@ function EditSubscription(props: MyComponentProps) {
             // socketService.connect().then((socket: any) => {
             //   socket.emit("update_quote", response.data.data);
             // });
+            setUpgradeAmount('0')
+            setDescription('')
             toast.success(response.data.message);
             closeModal(false);
           } else {
@@ -118,7 +139,7 @@ function EditSubscription(props: MyComponentProps) {
                             name="distanceFromKelowna"
                             className="form-control"
                             id="inputEmail4"
-                            placeholder="Distance"
+                            placeholder="Price per month"
                           />
                         </div>
                       </div>
@@ -170,7 +191,7 @@ function EditSubscription(props: MyComponentProps) {
                                 className="form-label"
                                 htmlFor="Delivery Fee"
                             >
-                                Next invoice <span>${(subscription.monthlyCost + parseInt(upgradeAmount) || subscription.monthlyCost)}</span>
+                                Next invoice <span>${(subscription.upgradedCost + parseInt(upgradeAmount) || subscription.upgradedCost)}</span>
                             </label>
                             </div>
                         </div>
