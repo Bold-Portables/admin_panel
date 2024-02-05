@@ -15,6 +15,7 @@ import SendEmail from "../components/SendEmail";
 import ServiceRequests from "../components/ServiceRequests";
 import ServicesList from "../components/ServiceManagement/ServicesList";
 import InventoryList from "../components/InventoryManagement";
+import InventoryServiceRequests from "../components/InventoryManagement/InventoryServiceRequests";
 import AssignQRCode from "../components/AssignQRCode";
 import CategoryManagement from "../components/CategoryManagement";
 import InventoryTypeList from "../components/InventoryTypesManage";
@@ -171,6 +172,14 @@ function RootRouter() {
             element={
               <PrivateRoute>
                 <InventoryDetail />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/inventory-service-requests"
+            element={
+              <PrivateRoute>
+                <InventoryServiceRequests />
               </PrivateRoute>
             }
           />
