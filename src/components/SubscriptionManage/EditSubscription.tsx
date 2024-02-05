@@ -77,9 +77,6 @@ function EditSubscription(props: MyComponentProps) {
         (response) => {
           setLoading(false);
           if (response.data.status === 1) {
-            // socketService.connect().then((socket: any) => {
-            //   socket.emit("update_quote", response.data.data);
-            // });
             setUpgradeAmount('0')
             setDescription('')
             toast.success(response.data.message);
