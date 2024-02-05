@@ -438,6 +438,9 @@ const getFilterDetails=(filterName:string)=>{
                       <span className="sub-text">Created At</span>
                     </div>
                     <div className="nk-tb-col">
+                      <span>Service Requests</span>
+                    </div>
+                    <div className="nk-tb-col">
                       <span>Status</span>
                     </div>
                     <div className="nk-tb-col hide-sm-nk">
@@ -500,6 +503,19 @@ const getFilterDetails=(filterName:string)=>{
                         <div className="nk-tb-col hide-sm-nk">
                           <span>{getFormatedDate(item.createdAt)}</span>
                         </div>
+                        {item.status === "active" ? (
+                          <div className="nk-tb-col capitalize text-center">
+                            <span className="tb-status text-info">
+                              0
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="nk-tb-col capitalize text-center">
+                            <span className="tb-status text-info">
+                              0
+                            </span>
+                          </div>
+                        )}
                         <div className="nk-tb-col">
                           <span className="tb-odr-status">
                             <span
