@@ -214,6 +214,13 @@ function InventoryList(props: MyComponentProps) {
     }
   };
 
+  const handleViewInventoryServices = (item: any) => {
+    if (item.status !== "pending") {
+      dispatch(saveInventory(item));
+      navigate(`/inventory-service-requests`);
+    }
+  };
+
 
 const getFilterDetails=(filterName:string)=>{
     if (filterName === "productName") {
@@ -577,6 +584,19 @@ const getFilterDetails=(filterName:string)=>{
                                         >
                                           <em className="icon ni ni-eye"></em>
                                           <span>View Detail</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                    {item.status === "active" && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleViewInventoryServices(item)
+                                          }
+                                        >
+                                          <em className="icon ni ni-inbox"></em>
+                                          <span>Service Requests</span>
                                         </a>
                                       </li>
                                     )}
