@@ -214,6 +214,13 @@ function InventoryList(props: MyComponentProps) {
     }
   };
 
+  const handleViewInventoryServices = (item: any) => {
+    if (item.status !== "pending") {
+      dispatch(saveInventory(item));
+      navigate(`/inventory-service-requests`);
+    }
+  };
+
 
 const getFilterDetails=(filterName:string)=>{
     if (filterName === "productName") {
@@ -438,6 +445,9 @@ const getFilterDetails=(filterName:string)=>{
                       <span className="sub-text">Created At</span>
                     </div>
                     <div className="nk-tb-col">
+                      <span>Service Requests</span>
+                    </div>
+                    <div className="nk-tb-col">
                       <span>Status</span>
                     </div>
                     <div className="nk-tb-col hide-sm-nk">
@@ -478,7 +488,7 @@ const getFilterDetails=(filterName:string)=>{
                         {item.status === "active" && item.coordinator ? (
                           <div className="nk-tb-col capitalize">
                             <span className="tb-status">
-                              {item.coordinator.name}
+                              {item.coordinator}
                             </span>
                           </div>
                         ) : (
@@ -500,6 +510,20 @@ const getFilterDetails=(filterName:string)=>{
                         <div className="nk-tb-col hide-sm-nk">
                           <span>{getFormatedDate(item.createdAt)}</span>
                         </div>
+                        {item.status === "active" &&
+                          item.serviceRequestCount ? (
+                          <div className="nk-tb-col capitalize text-center">
+                            <span className="tb-status text-info">
+                              { item.serviceRequestCount }
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="nk-tb-col capitalize text-center">
+                            <span className="tb-status text-info">
+                              0
+                            </span>
+                          </div>
+                        )}
                         <div className="nk-tb-col">
                           <span className="tb-odr-status">
                             <span
@@ -561,6 +585,20 @@ const getFilterDetails=(filterName:string)=>{
                                         >
                                           <em className="icon ni ni-eye"></em>
                                           <span>View Detail</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                    {item.status === "active" &&
+                                      item.serviceRequestCount > 0 && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleViewInventoryServices(item)
+                                          }
+                                        >
+                                          <em className="icon ni ni-inbox"></em>
+                                          <span>Service Requests</span>
                                         </a>
                                       </li>
                                     )}
