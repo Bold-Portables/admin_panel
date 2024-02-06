@@ -488,7 +488,7 @@ const getFilterDetails=(filterName:string)=>{
                         {item.status === "active" && item.coordinator ? (
                           <div className="nk-tb-col capitalize">
                             <span className="tb-status">
-                              {item.coordinator.name}
+                              {item.coordinator}
                             </span>
                           </div>
                         ) : (
@@ -510,10 +510,11 @@ const getFilterDetails=(filterName:string)=>{
                         <div className="nk-tb-col hide-sm-nk">
                           <span>{getFormatedDate(item.createdAt)}</span>
                         </div>
-                        {item.status === "active" ? (
+                        {item.status === "active" &&
+                          item.serviceRequestCount ? (
                           <div className="nk-tb-col capitalize text-center">
                             <span className="tb-status text-info">
-                              0
+                              { item.serviceRequestCount }
                             </span>
                           </div>
                         ) : (
@@ -587,7 +588,8 @@ const getFilterDetails=(filterName:string)=>{
                                         </a>
                                       </li>
                                     )}
-                                    {item.status === "active" && (
+                                    {item.status === "active" &&
+                                      item.serviceRequestCount > 0 && (
                                       <li>
                                         <a
                                           className="cursor_ponter"
