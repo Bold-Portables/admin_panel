@@ -33,7 +33,7 @@ function ServiceRequests(props: MyComponentProps) {
   const openLightbox = (index: number, imagesPath: any) => {
     const allImagesPath: any[] = [];
     imagesPath.forEach((item: any) => {
-      allImagesPath.push(`${process.env.REACT_APP_BASEURL}/${item.image_path}`);
+      allImagesPath.push(`${process.env.REACT_APP_AWS_S3_URL}/${item.image_path}`);
     });
     setImages(allImagesPath);
     setPhotoIndex(index);
@@ -256,10 +256,10 @@ const viewServiceRequestDetails=(id:any)=>{
                             item.images.length > 0 &&
                             item.images.map((element: any, index: number) => (
                               <img
-                                key={element.image_path}
+                                key={`${element.image_path }-${index}`}
                                 onClick={() => openLightbox(index, item.images)}
-                                src={`${process.env.REACT_APP_BASEURL}/${element.image_path}`}
-                                alt="quotation"
+                                src={`${process.env.REACT_APP_AWS_S3_URL}/${element.image_path}`}
+                                alt="Service img"
                                 style={{ width: "50px", height: "50px" }}
                               />
                             ))}
