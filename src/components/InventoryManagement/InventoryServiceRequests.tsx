@@ -9,6 +9,7 @@ import { authAxios } from "../../config/config";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { socketService } from "../../config/socketService";
 import { saveServiceId } from "../../Redux/Reducers/appSlice";
 import Lightbox from "react-image-lightbox";
 
@@ -75,9 +76,9 @@ const InventoryServiceRequests = (props: MyComponentProps) => {
             setLoading(false);
             if (response.data.status === 1) {
               toast.success(response.data?.message);
-            //   socketService.connect().then((socket: any) => {
-            //     socket.emit("resolved_service", response.data);
-            //   });
+              socketService.connect().then((socket: any) => {
+                socket.emit("resolved_service", response.data);
+              });
             getInventoryServicesData();
             } else {
               toast.error(response.data?.message);
@@ -118,7 +119,7 @@ const InventoryServiceRequests = (props: MyComponentProps) => {
   const openLightbox = (index: number, imagesPath: any) => {
     const allImagesPath: any[] = [];
     imagesPath.forEach((item: any) => {
-      allImagesPath.push(`${process.env.REACT_APP_BASEURL}/${item.image_path}`);
+      allImagesPath.push(`${process.env.REACT_APP_AWS_S3_URL}/${item.image_path}`);
     });
     setImages(allImagesPath);
     setPhotoIndex(index);
@@ -257,8 +258,8 @@ const InventoryServiceRequests = (props: MyComponentProps) => {
                               <img
                                 key={element.image_path}
                                 onClick={() => openLightbox(index, item.images)}
-                                src={`${process.env.REACT_APP_BASEURL}/${element.image_path}`}
-                                alt="quotation"
+                                src={`${process.env.REACT_APP_AWS_S3_URL}/${element.image_path}`}
+                                alt="Service img"
                                 style={{ width: "50px", height: "50px" }}
                               />
                             ))}
