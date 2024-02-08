@@ -546,14 +546,14 @@ const getFilterDetails=(filterName:string)=>{
                                 }}
                                 download={`qr_code_${item?._id}.svg`}
                               >
-                                <div dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
+                                <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
                                 {/* <p className="text-center">{item.qrId}</p> */}
 
                               </a>
                             </div>
                           ) : (
                             <div className="nk-tb-col hide-sm-nk">
-                              <div dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
+                              <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
                               {/* <p>{item.qrId}</p> */}
                             </div>
                           )

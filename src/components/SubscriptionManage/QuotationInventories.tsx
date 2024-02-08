@@ -264,8 +264,9 @@ function QuotationInventoryList(props: MyComponentProps) {
                           <a>
                             <span
                               className="tb-status text-primary"
+                              onClick={() => handleViewInventoryDetails(item)}
                             >
-                              {item._id?.slice(-8)?.toUpperCase()}
+                              {item.qrId}
                             </span>
                           </a>
                         </div>
@@ -326,7 +327,6 @@ function QuotationInventoryList(props: MyComponentProps) {
                         <div className="nk-tb-col">
                             <div className=" hide-sm-nk">
                               <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
-                              { <p className="text-center">{item.qrId}</p> }
                             </div>
                         </div>      
 
