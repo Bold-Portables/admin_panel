@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import IsLoadingHOC from "../../Common/IsLoadingHOC";
 import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import Pagination from "../../Common/Pagination";
+import MoveConfirmationModal from "../../Common/MoveConfirmation";
 import { getFormatedDate, replaceHyphenCapitolize } from "../../Helper";
 import { Link} from "react-router-dom";
 import { saveInventory } from "../../Redux/Reducers/appSlice";
@@ -25,6 +26,8 @@ function QuotationInventoryList(props: MyComponentProps) {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemPerPage] = useState<number>(10);
+  const [elementID, setElementID] = useState<string>("");
+  const [moveModal, setMoveModal] = useState(false);
   const { quotation } = useSelector((state: RootState) => state.app);
 
 
@@ -128,23 +131,35 @@ function QuotationInventoryList(props: MyComponentProps) {
     }
   };
 
-  const handleCreateModal = () => {
-    // setAddModal(true);
-  };
-
-  const handleEditModal = (data: any) => {
-    // setElementData(data);
-    // setEditModal(true);
-  };
-
-  const handleDeleteModal = (_id: string) => {
-    // setElementID(_id);
-    // setDeleteModal(true);
-  };
-
   const handleMoveModal = (_id: string) => {
-    // setElementID(_id);
-    // setMoveModal(true);
+    setElementID(_id);
+    setMoveModal(true);
+  };
+
+  const handleMoveeItem = async () => {
+    const payload = { inventory_id: elementID };
+    setLoading(true);
+    await authAxios()
+      .post(`/inventory/reinitialize-qr-code-value`, payload)
+      .then(
+        (response) => {
+          setLoading(false);
+          if (response.data.status === 1) {
+            toast.success(response.data?.message);
+            setMoveModal(false);
+            getInventoryListData(quotation._id, quotation.type);
+          } else {
+            toast.error(response.data?.message);
+          }
+        },
+        (error) => {
+          setLoading(false);
+          toast.error(error.response.data?.message);
+        }
+      )
+      .catch((error) => {
+        console.log("errorrrr", error);
+      });
   };
 
   function getSVGContentFromDataURL(dataUrl: string) {
@@ -358,25 +373,6 @@ function QuotationInventoryList(props: MyComponentProps) {
                                         </a>
                                       </li>
                                     )}
-                                    <li>
-                                      <a onClick={() => handleEditModal(item)}>
-                                        <em className="icon ni ni-edit"></em>
-                                        <span>Edit</span>
-                                      </a>
-                                    </li>
-                                    {item.status === "pending" && (
-                                      <li>
-                                        <a
-                                          className="cursor_ponter"
-                                          onClick={() =>
-                                            handleDeleteModal(item._id)
-                                          }
-                                        >
-                                          <em className="icon ni ni-trash"></em>
-                                          <span>Remove</span>
-                                        </a>
-                                      </li>
-                                    )}
                                     {item.status === "active" && (
                                       <li>
                                         <a
@@ -414,6 +410,14 @@ function QuotationInventoryList(props: MyComponentProps) {
           </div>
         </div>
       </div>
+      {moveModal && (
+        <MoveConfirmationModal
+          modal={moveModal}
+          closeModal={(isModal: boolean) => setMoveModal(isModal)}
+          handleSubmit={handleMoveeItem}
+          actionType="production"
+        />
+      )}
     </>
   );
 }
