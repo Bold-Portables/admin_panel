@@ -125,10 +125,8 @@ function QuotationInventoryList(props: MyComponentProps) {
   };
 
   const handleViewInventoryServices = (item: any) => {
-    if (item.status !== "pending") {
-      dispatch(saveInventory(item));
-      navigate(`/inventory-service-requests`);
-    }
+    dispatch(saveInventory(item));
+    navigate(`/inventory-service-requests`);
   };
 
   const handleMoveModal = (_id: string) => {
@@ -301,8 +299,7 @@ function QuotationInventoryList(props: MyComponentProps) {
                         <div className="nk-tb-col tb-col-lg">
                           <span>{getFormatedDate(item.createdAt)}</span>
                         </div>
-                        {item.status === "active" &&
-                          item.serviceRequestCount ? (
+                        {item.serviceRequestCount ? (
                           <div className="nk-tb-col capitalize text-center">
                             <span className="tb-status text-info">
                               { item.serviceRequestCount }
@@ -359,8 +356,7 @@ function QuotationInventoryList(props: MyComponentProps) {
                                         </a>
                                       </li>
                                     )}
-                                    {item.status === "active" &&
-                                      item.serviceRequestCount > 0 && (
+                                    {item.serviceRequestCount > 0 && (
                                       <li>
                                         <a
                                           className="cursor_ponter"
