@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import IsLoadingHOC from "../../Common/IsLoadingHOC";
 import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import Pagination from "../../Common/Pagination";
+import MoveConfirmationModal from "../../Common/MoveConfirmation";
 import { getFormatedDate, replaceHyphenCapitolize } from "../../Helper";
 import { Link} from "react-router-dom";
 import { saveInventory } from "../../Redux/Reducers/appSlice";
@@ -25,6 +26,8 @@ function QuotationInventoryList(props: MyComponentProps) {
   const [totalCount, setTotalCount] = useState<number>(0);
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [itemsPerPage, setItemPerPage] = useState<number>(10);
+  const [elementID, setElementID] = useState<string>("");
+  const [moveModal, setMoveModal] = useState(false);
   const { quotation } = useSelector((state: RootState) => state.app);
 
 
@@ -114,6 +117,49 @@ function QuotationInventoryList(props: MyComponentProps) {
     navigate("/quotation-detail");
   };
 
+  const handleViewInventoryDetails = (item: any) => {
+    if (item.status !== "pending") {
+      dispatch(saveInventory(item));
+      navigate(`/inventory-detail`);
+    }
+  };
+
+  const handleViewInventoryServices = (item: any) => {
+    dispatch(saveInventory(item));
+    navigate(`/inventory-service-requests`);
+  };
+
+  const handleMoveModal = (_id: string) => {
+    setElementID(_id);
+    setMoveModal(true);
+  };
+
+  const handleMoveeItem = async () => {
+    const payload = { inventory_id: elementID };
+    setLoading(true);
+    await authAxios()
+      .post(`/inventory/reinitialize-qr-code-value`, payload)
+      .then(
+        (response) => {
+          setLoading(false);
+          if (response.data.status === 1) {
+            toast.success(response.data?.message);
+            setMoveModal(false);
+            getInventoryListData(quotation._id, quotation.type);
+          } else {
+            toast.error(response.data?.message);
+          }
+        },
+        (error) => {
+          setLoading(false);
+          toast.error(error.response.data?.message);
+        }
+      )
+      .catch((error) => {
+        console.log("errorrrr", error);
+      });
+  };
+
   function getSVGContentFromDataURL(dataUrl: string) {
     const prefix = "data:image/svg+xml;utf8,";
 
@@ -198,10 +244,16 @@ function QuotationInventoryList(props: MyComponentProps) {
                       <span className="sub-text">Created At</span>
                     </div>
                     <div className="nk-tb-col tb-col-md">
+                      <span className="sub-text">Service Requests</span>
+                    </div>
+                    <div className="nk-tb-col tb-col-md">
                       <span>Status</span>
                     </div>
                     <div className="nk-tb-col tb-col-md">
                       <span className="sub-text">QR code</span>
+                    </div>
+                    <div className="nk-tb-col tb-col-md">
+                      <span className="sub-text">Action</span>
                     </div>
                   </div>
                   {listData &&
@@ -212,8 +264,9 @@ function QuotationInventoryList(props: MyComponentProps) {
                           <a>
                             <span
                               className="tb-status text-primary"
+                              onClick={() => handleViewInventoryDetails(item)}
                             >
-                              {item._id?.slice(-8)?.toUpperCase()}
+                              {item.qrId}
                             </span>
                           </a>
                         </div>
@@ -247,6 +300,19 @@ function QuotationInventoryList(props: MyComponentProps) {
                         <div className="nk-tb-col tb-col-lg">
                           <span>{getFormatedDate(item.createdAt)}</span>
                         </div>
+                        {item.serviceRequestCount ? (
+                          <div className="nk-tb-col capitalize text-center">
+                            <span className="tb-status text-info">
+                              { item.serviceRequestCount }
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="nk-tb-col capitalize text-center">
+                            <span className="tb-status text-info">
+                              0
+                            </span>
+                          </div>
+                        )}
                         <div className="nk-tb-col tb-col-sm">
                           <span className="tb-odr-status">
                             <span
@@ -261,8 +327,66 @@ function QuotationInventoryList(props: MyComponentProps) {
                         <div className="nk-tb-col">
                             <div className=" hide-sm-nk">
                               <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
-                              { <p className="text-center">{item.qrId}</p> }
                             </div>
+                        </div>      
+
+                        <div className="nk-tb-col nk-tb-col-tools">
+                          <ul className="gx-1">
+                            <li>
+                              <div className="drodown">
+                                <a
+                                  href="#"
+                                  className="dropdown-toggle btn btn-icon btn-trigger"
+                                  data-bs-toggle="dropdown"
+                                >
+                                  <em className="icon ni ni-more-h"></em>
+                                </a>
+                                <div className="dropdown-menu dropdown-menu-end">
+                                  <ul className="link-list-opt no-bdr">
+                                    {item.status !== "pending" && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleViewInventoryDetails(item)
+                                          }
+                                        >
+                                          <em className="icon ni ni-eye"></em>
+                                          <span>View Detail</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                    {item.serviceRequestCount > 0 && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleViewInventoryServices(item)
+                                          }
+                                        >
+                                          <em className="icon ni ni-inbox"></em>
+                                          <span>Service Requests</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                    {item.status === "active" && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleMoveModal(item._id)
+                                          }
+                                        >
+                                          <em className="icon ni ni-move"></em>
+                                          <span>Move</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                  </ul>
+                                </div>
+                              </div>
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     ))}
@@ -282,6 +406,14 @@ function QuotationInventoryList(props: MyComponentProps) {
           </div>
         </div>
       </div>
+      {moveModal && (
+        <MoveConfirmationModal
+          modal={moveModal}
+          closeModal={(isModal: boolean) => setMoveModal(isModal)}
+          handleSubmit={handleMoveeItem}
+          actionType="production"
+        />
+      )}
     </>
   );
 }

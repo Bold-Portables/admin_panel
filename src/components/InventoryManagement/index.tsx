@@ -215,10 +215,8 @@ function InventoryList(props: MyComponentProps) {
   };
 
   const handleViewInventoryServices = (item: any) => {
-    if (item.status !== "pending") {
-      dispatch(saveInventory(item));
-      navigate(`/inventory-service-requests`);
-    }
+    dispatch(saveInventory(item));
+    navigate(`/inventory-service-requests`);
   };
 
 
@@ -510,8 +508,7 @@ const getFilterDetails=(filterName:string)=>{
                         <div className="nk-tb-col hide-sm-nk">
                           <span>{getFormatedDate(item.createdAt)}</span>
                         </div>
-                        {item.status === "active" &&
-                          item.serviceRequestCount ? (
+                        {item.serviceRequestCount ? (
                           <div className="nk-tb-col capitalize text-center">
                             <span className="tb-status text-info">
                               { item.serviceRequestCount }
@@ -549,14 +546,14 @@ const getFilterDetails=(filterName:string)=>{
                                 }}
                                 download={`qr_code_${item?._id}.svg`}
                               >
-                                <div dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
+                                <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
                                 {/* <p className="text-center">{item.qrId}</p> */}
 
                               </a>
                             </div>
                           ) : (
                             <div className="nk-tb-col hide-sm-nk">
-                              <div dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
+                              <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
                               {/* <p>{item.qrId}</p> */}
                             </div>
                           )
@@ -588,8 +585,7 @@ const getFilterDetails=(filterName:string)=>{
                                         </a>
                                       </li>
                                     )}
-                                    {item.status === "active" &&
-                                      item.serviceRequestCount > 0 && (
+                                    {item.serviceRequestCount > 0 && (
                                       <li>
                                         <a
                                           className="cursor_ponter"
