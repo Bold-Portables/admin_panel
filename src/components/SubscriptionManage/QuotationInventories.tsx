@@ -114,6 +114,39 @@ function QuotationInventoryList(props: MyComponentProps) {
     navigate("/quotation-detail");
   };
 
+  const handleViewInventoryDetails = (item: any) => {
+    if (item.status !== "pending") {
+      dispatch(saveInventory(item));
+      navigate(`/inventory-detail`);
+    }
+  };
+
+  const handleViewInventoryServices = (item: any) => {
+    if (item.status !== "pending") {
+      dispatch(saveInventory(item));
+      navigate(`/inventory-service-requests`);
+    }
+  };
+
+  const handleCreateModal = () => {
+    // setAddModal(true);
+  };
+
+  const handleEditModal = (data: any) => {
+    // setElementData(data);
+    // setEditModal(true);
+  };
+
+  const handleDeleteModal = (_id: string) => {
+    // setElementID(_id);
+    // setDeleteModal(true);
+  };
+
+  const handleMoveModal = (_id: string) => {
+    // setElementID(_id);
+    // setMoveModal(true);
+  };
+
   function getSVGContentFromDataURL(dataUrl: string) {
     const prefix = "data:image/svg+xml;utf8,";
 
@@ -198,10 +231,16 @@ function QuotationInventoryList(props: MyComponentProps) {
                       <span className="sub-text">Created At</span>
                     </div>
                     <div className="nk-tb-col tb-col-md">
+                      <span className="sub-text">Service Requests</span>
+                    </div>
+                    <div className="nk-tb-col tb-col-md">
                       <span>Status</span>
                     </div>
                     <div className="nk-tb-col tb-col-md">
                       <span className="sub-text">QR code</span>
+                    </div>
+                    <div className="nk-tb-col tb-col-md">
+                      <span className="sub-text">Action</span>
                     </div>
                   </div>
                   {listData &&
@@ -247,6 +286,20 @@ function QuotationInventoryList(props: MyComponentProps) {
                         <div className="nk-tb-col tb-col-lg">
                           <span>{getFormatedDate(item.createdAt)}</span>
                         </div>
+                        {item.status === "active" &&
+                          item.serviceRequestCount ? (
+                          <div className="nk-tb-col capitalize text-center">
+                            <span className="tb-status text-info">
+                              { item.serviceRequestCount }
+                            </span>
+                          </div>
+                        ) : (
+                          <div className="nk-tb-col capitalize text-center">
+                            <span className="tb-status text-info">
+                              0
+                            </span>
+                          </div>
+                        )}
                         <div className="nk-tb-col tb-col-sm">
                           <span className="tb-odr-status">
                             <span
@@ -263,6 +316,85 @@ function QuotationInventoryList(props: MyComponentProps) {
                               <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
                               { <p className="text-center">{item.qrId}</p> }
                             </div>
+                        </div>      
+
+                        <div className="nk-tb-col nk-tb-col-tools">
+                          <ul className="gx-1">
+                            <li>
+                              <div className="drodown">
+                                <a
+                                  href="#"
+                                  className="dropdown-toggle btn btn-icon btn-trigger"
+                                  data-bs-toggle="dropdown"
+                                >
+                                  <em className="icon ni ni-more-h"></em>
+                                </a>
+                                <div className="dropdown-menu dropdown-menu-end">
+                                  <ul className="link-list-opt no-bdr">
+                                    {item.status !== "pending" && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleViewInventoryDetails(item)
+                                          }
+                                        >
+                                          <em className="icon ni ni-eye"></em>
+                                          <span>View Detail</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                    {item.status === "active" &&
+                                      item.serviceRequestCount > 0 && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleViewInventoryServices(item)
+                                          }
+                                        >
+                                          <em className="icon ni ni-inbox"></em>
+                                          <span>Service Requests</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                    <li>
+                                      <a onClick={() => handleEditModal(item)}>
+                                        <em className="icon ni ni-edit"></em>
+                                        <span>Edit</span>
+                                      </a>
+                                    </li>
+                                    {item.status === "pending" && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleDeleteModal(item._id)
+                                          }
+                                        >
+                                          <em className="icon ni ni-trash"></em>
+                                          <span>Remove</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                    {item.status === "active" && (
+                                      <li>
+                                        <a
+                                          className="cursor_ponter"
+                                          onClick={() =>
+                                            handleMoveModal(item._id)
+                                          }
+                                        >
+                                          <em className="icon ni ni-move"></em>
+                                          <span>Move</span>
+                                        </a>
+                                      </li>
+                                    )}
+                                  </ul>
+                                </div>
+                              </div>
+                            </li>
+                          </ul>
                         </div>
                       </div>
                     ))}
