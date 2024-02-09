@@ -75,7 +75,8 @@ function InventoryList(props: MyComponentProps) {
         : null;
 
     if (svgContent) {
-        const modifiedSVGContent = svgContent.replace(/<text.*?<\/text>/g, '');
+       const modifiedSVGContent = svgContent.replace(/<text.*?<\/text>/g, '')
+                                            .replace('viewBox="0 0 41 50"', 'viewBox="0 0 40 40"');
 
         return modifiedSVGContent;
     }
@@ -466,7 +467,7 @@ function InventoryList(props: MyComponentProps) {
                         </div>
                         <div className="nk-tb-col">
                           <span className="tb-status text-primary">
-                            {item._id?.slice(-8)?.toUpperCase()}
+                            {item.qrId}
                           </span>
                         </div>
                         <div className="nk-tb-col">
@@ -503,8 +504,7 @@ function InventoryList(props: MyComponentProps) {
                           </span>
                         </div>
                         <div className="nk-tb-col tb-col-md">
-                          <div dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
-                          { <p className="text-center">{item.qrId}</p> }
+                          <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
                         </div>
                       </div>
                     ))}
