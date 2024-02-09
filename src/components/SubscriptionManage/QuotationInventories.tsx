@@ -168,7 +168,8 @@ function QuotationInventoryList(props: MyComponentProps) {
         : null;
 
     if (svgContent) {
-        const modifiedSVGContent = svgContent.replace(/<text.*?<\/text>/g, '');
+      const modifiedSVGContent = svgContent.replace(/<text.*?<\/text>/g, '')
+                                           .replace('viewBox="0 0 41 50"', 'viewBox="0 0 40 40"');
 
         return modifiedSVGContent;
     }
