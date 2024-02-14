@@ -156,8 +156,9 @@ function InventoryList(props: MyComponentProps) {
           setLoading(false);
           if (response.data.status === 1) {
             const resData = response.data.data;
-            setListData(resData);
-            // setTotalCount(resData?.totalCount);
+            
+            setListData(resData.filteredInventory);
+            setTotalCount(resData.totalCount);
           } else {
             toast.error(response.data.message);
             setListData([]);
