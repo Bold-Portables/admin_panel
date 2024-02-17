@@ -38,7 +38,7 @@ function InventoryList(props: MyComponentProps) {
 
   useEffect(() => {
     getInventoryListData();
-  }, [currentPage, itemsPerPage, status]);
+  }, [currentPage, itemsPerPage, status, order]);
 
   useEffect(() => {
     dispatch(saveInventory(null));
@@ -48,7 +48,7 @@ function InventoryList(props: MyComponentProps) {
     setLoading(true);
     await authAxios()
       .get(
-        `/inventory/get-qr-code-details-status?status=${status}&page=${currentPage}&limit=${itemsPerPage}`
+        `/inventory/get-qr-code-details-status?status=${status}&page=${currentPage}&limit=${itemsPerPage}&order=${order}`
       )
       .then(
         (response) => {
@@ -185,7 +185,7 @@ function InventoryList(props: MyComponentProps) {
   const changeOrder = (order: string) => {
     console.log(order)
     setCurrentPage(1);
-    // setOrder(order);
+    setOrder(order);
   };
 
   const changeFilter = (name: string) => {
@@ -371,7 +371,7 @@ const getFilterDetails=(filterName:string)=>{
                                 className="dropdown-toggle dropdown-indicator btn btn-outline-light btn-white"
                                 data-bs-toggle="dropdown"
                               >
-                                {getStatusName(status) || "Order by"}
+                                Order by
                               </a>
                               <div className="dropdown-menu dropdown-menu-end">
                                 <ul className="link-list-opt no-bdr">                     
