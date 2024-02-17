@@ -32,6 +32,7 @@ function InventoryList(props: MyComponentProps) {
   const [elementData, setElementData] = useState(null);
   const [elementID, setElementID] = useState<string>("");
   const [status, setStatus] = useState("");
+  const [order, setOrder] = useState("");
   const [searchText, setSearchText] = useState("");
   const [filterName, setFilterName] = useState("productName");
 
@@ -179,6 +180,12 @@ function InventoryList(props: MyComponentProps) {
   const changeStatus = (name: string) => {
     setCurrentPage(1);
     setStatus(name);
+  };
+
+  const changeOrder = (order: string) => {
+    console.log(order)
+    setCurrentPage(1);
+    // setOrder(order);
   };
 
   const changeFilter = (name: string) => {
@@ -357,6 +364,47 @@ const getFilterDetails=(filterName:string)=>{
                         data-content="more-options"
                       >
                         <ul className="nk-block-tools g-3">
+                        <li>
+                            <div className="drodown">
+                              <a
+                                href="#"
+                                className="dropdown-toggle dropdown-indicator btn btn-outline-light btn-white"
+                                data-bs-toggle="dropdown"
+                              >
+                                {getStatusName(status) || "Order by"}
+                              </a>
+                              <div className="dropdown-menu dropdown-menu-end">
+                                <ul className="link-list-opt no-bdr">                     
+                                  <li>
+                                    <a onClick={() => changeOrder("id-desc")}>
+                                      <span>ID Descending</span>
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a onClick={() => changeOrder("id-asc")}>
+                                      <span>ID Ascending</span>
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a onClick={() => changeOrder("new")}>
+                                      <span>Newest</span>
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a onClick={() => changeOrder("old")}>
+                                      <span>Oldest</span>
+                                    </a>
+                                  </li>
+                                  <li>
+                                    <a onClick={() => changeOrder("last-updated")}>
+                                      <span>Last Updated</span>
+                                    </a>
+                                  </li>
+                                </ul>
+                              </div>
+                            </div>
+                          </li>
+                          
                           <li>
                             <div className="drodown">
                               <a
