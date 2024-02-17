@@ -533,8 +533,7 @@ const getFilterDetails=(filterName:string)=>{
                             </span>
                           </span>
                         </div>
-                        {
-                          item.status === "pending" ? (
+                     
                             <div className="nk-tb-col hide-sm-nk" style={{width: '150px'}}>
                               <a
                                 href={item?.qrCode}
@@ -552,13 +551,6 @@ const getFilterDetails=(filterName:string)=>{
 
                               </a>
                             </div>
-                          ) : (
-                            <div className="nk-tb-col hide-sm-nk">
-                              <div className="h-110px w-110px" dangerouslySetInnerHTML={{ __html: getSVGContentFromDataURL(item?.qrCode) || '' }} />
-                              {/* <p>{item.qrId}</p> */}
-                            </div>
-                          )
-                        }
 
                         <div className="nk-tb-col nk-tb-col-tools">
                           <ul className="gx-1">
