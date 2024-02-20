@@ -395,11 +395,6 @@ const getFilterDetails=(filterName:string)=>{
                                       <span>Oldest</span>
                                     </a>
                                   </li>
-                                  <li>
-                                    <a onClick={() => changeOrder("last-updated")}>
-                                      <span>Last Updated</span>
-                                    </a>
-                                  </li>
                                 </ul>
                               </div>
                             </div>
