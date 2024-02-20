@@ -183,7 +183,6 @@ function InventoryList(props: MyComponentProps) {
   };
 
   const changeOrder = (order: string) => {
-    console.log(order)
     setCurrentPage(1);
     setOrder(order);
   };
@@ -621,7 +620,7 @@ const getFilterDetails=(filterName:string)=>{
                                         </a>
                                       </li>
                                     )}
-                                    {item.serviceRequestCount > 0 && (
+                                    {item.serviceRequestCount > 0 &&(
                                       <li>
                                         <a
                                           className="cursor_ponter"
@@ -640,7 +639,8 @@ const getFilterDetails=(filterName:string)=>{
                                         <span>Edit</span>
                                       </a>
                                     </li>
-                                    {item.status === "pending" && (
+                                    {item.status === "pending" &&
+                                      item.qrId !== '0001' && (
                                       <li>
                                         <a
                                           className="cursor_ponter"
