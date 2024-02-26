@@ -42,7 +42,7 @@ function SubscriptionList(props: MyComponentProps) {
   const [itemsPerPage, setItemPerPage] = useState<number>(10);
   const [saveLocationModal, setSaveLocationModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
-  const [editSubscriptionModal, setEditSubscriptionModal] = useState<boolean>(true);
+  const [editSubscriptionModal, setEditSubscriptionModal] = useState<boolean>(false);
   const [addServiceFeeModal, setAddServiceFeeModal] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState("");
   const [subscription, setSubscription] = useState("");
@@ -479,8 +479,8 @@ function SubscriptionList(props: MyComponentProps) {
                                         <a
                                           onClick={() => handleUpdateSubscription(item._id)}
                                         >
-                                          <em className="icon ni ni-coin-alt"></em>
-                                          <span>Update Subscription</span>
+                                          <em className="icon ni ni-edit-alt"></em>
+                                          <span>Edit Subscription</span>
                                         </a>
                                       </li>
                                     )}

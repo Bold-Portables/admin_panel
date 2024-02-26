@@ -25,6 +25,7 @@ interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
   quotationId: string;
   quotationType: string;
+  subscriptionId: string;
   modal: boolean;
   closeModal: (isModal: boolean) => void;
   getListingData: () => void;
@@ -35,6 +36,7 @@ function EditQuotation(props: MyComponentProps) {
     setLoading,
     quotationId,
     quotationType,
+    subscriptionId,
     modal,
     closeModal,
     getListingData,
@@ -127,8 +129,8 @@ function EditQuotation(props: MyComponentProps) {
   ];
 
   const getProductDetailsData = async () => {
+    console.log('subscription id: ', subscriptionId)
     setLoading(true);
-    console.log('quote id: ', quotationId)
     const payload = { quote_id: quotationId };
     await authAxios()
       .post("/quotation/get-specific-quotation-from-all-collection", payload)
@@ -255,7 +257,7 @@ function EditQuotation(props: MyComponentProps) {
             <em className="icon ni ni-cross-sm"></em>
           </a>
           <div className="modal-body modal-body-md">
-            <h5 className="title">Edit Quotation</h5>
+            <h5 className="title">Edit Subscription</h5>
             <ul className="nk-nav nav nav-tabs">
               <li className="nav-item">
                 <a
@@ -661,7 +663,6 @@ function EditQuotation(props: MyComponentProps) {
                             Number of units
                           </label>
                           <input
-                            disabled
                             value={quotation.numUnits}
                             onChange={handleChangeQuotation}
                             type="text"
@@ -945,7 +946,7 @@ function EditQuotation(props: MyComponentProps) {
                             className="form-label"
                             htmlFor="Delivery Fee"
                           >
-                            Delivery Fee <span>${servicesPrice.pickUpPrice}</span>
+                            Current invoice <div>${`Current sub price`}</div>
                           </label>
                         </div>
                       </div>
@@ -955,20 +956,11 @@ function EditQuotation(props: MyComponentProps) {
                             className="form-label"
                             htmlFor="Delivery Fee"
                           >
-                            Monthly Invoice <span>${calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice}</span>
+                            Updated invoice <div>${calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice}</div>
                           </label>
                         </div>
                       </div>
-                      <div className="col-md-3 total-price">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="Delivery Fee"
-                          >
-                            Initial Invoice <span>${calculateAnObjValues(servicesPrice)}</span>
-                          </label>
-                        </div>
-                      </div>
+
                       <div className="col-12">
                         <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                           <li>
