@@ -70,6 +70,10 @@ function EditQuotation(props: MyComponentProps) {
     totalWorkers: 0,
   });
 
+  const [subscription, setSubscription] = useState({
+    monthlyCost: 0,
+  });
+
   const [servicesPrice, setServicesPrice] = useState<ServicesPrice>({
     workersCost: 0,
     deliveryPrice: 0,
@@ -84,6 +88,7 @@ function EditQuotation(props: MyComponentProps) {
     weeklyHoursCost: 0,
     pickUpPrice: 0,
   });
+  
 
   useEffect(() => {
     getProductDetailsData();
@@ -131,9 +136,8 @@ function EditQuotation(props: MyComponentProps) {
   const getProductDetailsData = async () => {
     console.log('subscription id: ', subscriptionId)
     setLoading(true);
-    const payload = { quote_id: quotationId };
     await authAxios()
-      .post("/quotation/get-specific-quotation-from-all-collection", payload)
+      .get(`/payment/admin/subscription-detail/${subscriptionId}`)
       .then(
         (response) => {
           setLoading(false);
@@ -141,6 +145,8 @@ function EditQuotation(props: MyComponentProps) {
             const resCoordinateData = response.data.data.quotation?.coordinator;
             const resData = response.data.data.quotation;
             const costDetails = response.data.data.quotation?.costDetails;
+            setSubscription(response.data.data.subscription)
+
             userFields.forEach((field) => {
               setCoordinator((prev) => ({
                 ...prev,
@@ -189,7 +195,7 @@ function EditQuotation(props: MyComponentProps) {
   };
 
   const handleSubmit = async (requestType: string) => {
-    let payload: any = { costDetails: servicesPrice };
+    let payload: any = { costDetails: servicesPrice, subscriptionId: subscriptionId };
     if (requestType === "save") {
       payload["type"] = "save";
     }
@@ -920,33 +926,16 @@ function EditQuotation(props: MyComponentProps) {
                           />
                         </div>
                       </div>
-                      <div className="col-md-6">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Delivery Fee
-                          </label>
-                          <input
-                            min={1}
-                            value={servicesPrice.pickUpPrice}
-                            onChange={handleChangeServicePrice}
-                            type="number"
-                            name="pickUpPrice"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter pickup Price"
-                          />
-                        </div>
-                      </div>
+
+                      <div></div>
+
                       <div className="col-md-3">
                         <div className="form-group">
                           <label
                             className="form-label"
                             htmlFor="Delivery Fee"
                           >
-                            Current invoice <div>${`Current sub price`}</div>
+                            Current invoice <div>${subscription.monthlyCost}</div>
                           </label>
                         </div>
                       </div>
@@ -975,19 +964,10 @@ function EditQuotation(props: MyComponentProps) {
                           <li>
                             <button
                               type="button"
-                              onClick={() => handleSubmit("save")}
+                              onClick={() => handleSubmit("update")}
                               className="btn btn-success"
                             >
                               Save Invoice
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              type="button"
-                              onClick={() => handleSubmit("send invoice")}
-                              className="btn btn-warning"
-                            >
-                              Send Invoice
                             </button>
                           </li>
                           <li>
