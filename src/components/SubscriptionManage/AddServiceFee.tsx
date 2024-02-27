@@ -72,7 +72,7 @@ function EditSubscription(props: MyComponentProps) {
     setLoading(true);
     
     await authAxios()
-      .post(`payment/admin/subscription/${subscriptionId}`, payload)
+      .post(`payment/admin/subscription-fee/${subscriptionId}`, payload)
       .then(
         (response) => {
           setLoading(false);

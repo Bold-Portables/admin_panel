@@ -34,8 +34,6 @@ interface MyComponentProps {
 function EditQuotation(props: MyComponentProps) {
   const {
     setLoading,
-    quotationId,
-    quotationType,
     subscriptionId,
     modal,
     closeModal,
@@ -134,7 +132,6 @@ function EditQuotation(props: MyComponentProps) {
   ];
 
   const getProductDetailsData = async () => {
-    console.log('subscription id: ', subscriptionId)
     setLoading(true);
     await authAxios()
       .get(`/payment/admin/subscription-detail/${subscriptionId}`)
@@ -194,26 +191,17 @@ function EditQuotation(props: MyComponentProps) {
     setServicesPrice((prev) => ({ ...prev, [name]: parseInt(value) }));
   };
 
-  const handleSubmit = async (requestType: string) => {
-    let payload: any = { costDetails: servicesPrice, subscriptionId: subscriptionId };
-    if (requestType === "save") {
-      payload["type"] = "save";
-    }
-    let endPoint: string = "quotation/update-quotation-for-construction";
-    if (quotationType === "construction") {
-      endPoint = "quotation/update-quotation-for-construction";
-    } else if (quotationType === "disaster-relief") {
-      endPoint = "quotation/update-quotation-for-disaster-relief";
-    } else if (quotationType === "farm-orchard-winery") {
-      endPoint = "quotation/update-quotation-for-farm-orchard-winery";
-    } else if (quotationType === "personal-or-business") {
-      endPoint = "quotation/update-quotation-for-personal-business-site";
-    } else if (quotationType === "recreational-site") {
-      endPoint = "quotation/update-quotation-for-recreational-site";
-    }
+  const handleSubmit = async () => {
+    const updatedCost = calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice
+
+    let payload: any = { 
+        costDetails: servicesPrice, 
+        updatedCost: updatedCost,
+    };
+
     setLoading(true);
     await authAxios()
-      .put(`/${endPoint}/${quotationId}`, payload)
+      .put(`payment/admin/subscription/${subscriptionId}`, payload)
       .then(
         (response) => {
           setLoading(false);
@@ -964,7 +952,7 @@ function EditQuotation(props: MyComponentProps) {
                           <li>
                             <button
                               type="button"
-                              onClick={() => handleSubmit("update")}
+                              onClick={() => handleSubmit()}
                               className="btn btn-success"
                             >
                               Save Invoice
