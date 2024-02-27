@@ -35,6 +35,8 @@ function EditQuotation(props: MyComponentProps) {
   const {
     setLoading,
     subscriptionId,
+    quotationType,
+    quotationId,
     modal,
     closeModal,
     getListingData,
@@ -194,9 +196,11 @@ function EditQuotation(props: MyComponentProps) {
   const handleSubmit = async () => {
     const updatedCost = calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice
 
-    let payload: any = { 
-        costDetails: servicesPrice, 
-        updatedCost: updatedCost,
+    let payload: any = {
+      quotationId: quotationId,
+      quotationType: quotationType,
+      costDetails: servicesPrice, 
+      updatedCost: updatedCost,
     };
 
     setLoading(true);
