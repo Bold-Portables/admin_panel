@@ -45,7 +45,7 @@ function SubscriptionList(props: MyComponentProps) {
   const [editSubscriptionModal, setEditSubscriptionModal] = useState<boolean>(false);
   const [addServiceFeeModal, setAddServiceFeeModal] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState("");
-  const [subscription, setSubscription] = useState("");
+  const [subscription, setSubscription] = useState({_id: '', quotationId: '', quotationType: ''});
   const [statusName, setStatusName] = useState("");
   const [statusLabel, setStatusLabel] = useState("Status");
   const [trackingID, setTrackingID] = useState("");
@@ -477,7 +477,7 @@ function SubscriptionList(props: MyComponentProps) {
                                     {item.status === "ACTIVE" && (
                                       <li>
                                         <a
-                                          onClick={() => handleUpdateSubscription(item._id)}
+                                          onClick={() => handleUpdateSubscription(item)}
                                         >
                                           <em className="icon ni ni-edit-alt"></em>
                                           <span>Edit Subscription</span>
@@ -488,7 +488,7 @@ function SubscriptionList(props: MyComponentProps) {
                                     {item.status === "ACTIVE" && (
                                       <li>
                                         <a
-                                          onClick={() => handleAddServiceFee(item._id)}
+                                          onClick={() => handleAddServiceFee(item)}
                                         >
                                           <em className="icon ni ni-coin-alt"></em>
                                           <span>Charge Service</span>
@@ -522,9 +522,9 @@ function SubscriptionList(props: MyComponentProps) {
       </div>
       {editSubscriptionModal && (
         <EditSubscription
-          subscriptionId={subscription}
-          quotationId={'65bd34eb057fbdbdd6393b11'}
-          quotationType={'farm-orchard-winery'}
+          subscriptionId={subscription._id}
+          quotationId={subscription.quotationId}
+          quotationType={subscription.quotationType}
           modal={editSubscriptionModal}
           closeModal={(isModal: boolean) => setEditSubscriptionModal(isModal)}
         />
@@ -532,7 +532,7 @@ function SubscriptionList(props: MyComponentProps) {
 
       {addServiceFeeModal && (
         <AddServiceFee
-          subscriptionId={subscription}
+          subscriptionId={subscription._id}
           modal={addServiceFeeModal}
           closeModal={(isModal: boolean) => setAddServiceFeeModal(isModal)}
         />
