@@ -183,6 +183,23 @@ function EditQuotation(props: MyComponentProps) {
   const handleSelectChange = (e: any) => {
     const { name, value } = e.target;
     setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }));
+
+    let cost: string
+
+    switch (name) {
+      case 'handwashing':
+        cost = 'handWashingCost';
+        break;
+      case 'twiceWeeklyService':
+        cost = 'twiceWeeklyServicing';
+        break;
+      default:
+        cost = `${name}Cost`;
+    }
+
+    if (value === 'no') {
+      setServicesPrice((prev) => ({...prev, [cost]: 0}))
+    }
   };
 
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -586,15 +603,15 @@ function EditQuotation(props: MyComponentProps) {
                             Use At Night
                           </label>
                           <select
-                          required
-                          name="useAtNight"
-                          value={quotation.useAtNight ? "yes" : "no"}
-                          className="form-control"
-                          onChange={handleSelectChange}
-                        >
-                          <option value="yes">Yes</option>
-                          <option value="no">No</option>
-                        </select>
+                            required
+                            name="useAtNight"
+                            value={quotation.useAtNight ? "yes" : "no"}
+                            className="form-control"
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -608,7 +625,7 @@ function EditQuotation(props: MyComponentProps) {
                           <input
                             min={0}
                             disabled={!quotation.useAtNight}
-                            value={servicesPrice.useAtNightCost}
+                            value={quotation.useAtNight ? servicesPrice.useAtNightCost : 0}
                             onChange={handleChangeServicePrice}
                             type="number"
                             name="useAtNightCost"
@@ -626,16 +643,16 @@ function EditQuotation(props: MyComponentProps) {
                           >
                             Use In Winter
                           </label>
-                          <input
-                            disabled
-                            value={quotation.useInWinter ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="useInWinter"
+                            value={quotation.useInWinter ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -730,16 +747,16 @@ function EditQuotation(props: MyComponentProps) {
                           >
                             Handwashing
                           </label>
-                          <input
-                            disabled
-                            value={quotation.handwashing ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="handwashing"
+                            value={quotation.handwashing ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -771,16 +788,16 @@ function EditQuotation(props: MyComponentProps) {
                           >
                             Hand Sanitizer Pump
                           </label>
-                          <input
-                            disabled
-                            value={quotation.handSanitizerPump ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="handSanitizerPump"
+                            value={quotation.handSanitizerPump ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -812,16 +829,16 @@ function EditQuotation(props: MyComponentProps) {
                           >
                             Twice Weekly Service
                           </label>
-                          <input
-                            disabled
-                            value={quotation.twiceWeeklyService ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="twiceWeeklyService"
+                            value={quotation.twiceWeeklyService ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
