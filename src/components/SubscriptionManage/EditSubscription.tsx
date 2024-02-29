@@ -88,6 +88,8 @@ function EditQuotation(props: MyComponentProps) {
     weeklyHoursCost: 0,
     pickUpPrice: 0,
   });
+
+  const [updateImmediately, setUpdateImmediately] = useState(true)
   
 
   useEffect(() => {
@@ -176,6 +178,11 @@ function EditQuotation(props: MyComponentProps) {
       .catch((error) => {
         console.log("errorrrr", error);
       });
+  };
+
+  const handleSelectChange = (e: any) => {
+    const { name, value } = e.target;
+    setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }));
   };
 
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -578,16 +585,16 @@ function EditQuotation(props: MyComponentProps) {
                           >
                             Use At Night
                           </label>
-                          <input
-                            disabled
-                            value={quotation.useAtNight ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="useAtNight"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
+                          <select
+                          required
+                          name="useAtNight"
+                          value={quotation.useAtNight ? "yes" : "no"}
+                          className="form-control"
+                          onChange={handleSelectChange}
+                        >
+                          <option value="yes">Yes</option>
+                          <option value="no">No</option>
+                        </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -918,6 +925,25 @@ function EditQuotation(props: MyComponentProps) {
                           />
                         </div>
                       </div>
+
+                      {/* <div className="col-md-5">
+                        <div className="form-group">
+                          <input
+                            className="inline"
+                            defaultChecked={true}
+                            onChange={ () => setUpdateImmediately(!updateImmediately)}
+                            type="checkbox"
+                            name="update-immediately"
+                            id="update-immediately"
+                          />
+                          <label
+                            className="form-label inline"
+                            htmlFor="update-immediately"
+                          >
+                            Update immediately
+                          </label>
+                        </div>
+                      </div> */}
 
                       <div></div>
 
