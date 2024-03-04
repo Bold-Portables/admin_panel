@@ -475,14 +475,13 @@ function EditEventSubscription(props: MyComponentProps) {
                             Male workers
                           </label>
                           <input
-                            disabled
                             value={quotation.maleWorkers}
                             onChange={handleChangeQuotation}
                             type="number"
                             name="maleWorkers"
                             className="form-control"
                             id="maleWorkers"
-                            placeholder="DisMale workerstance"
+                            placeholder="0"
                           />
                         </div>
                       </div>
@@ -495,15 +494,13 @@ function EditEventSubscription(props: MyComponentProps) {
                             Female workers
                           </label>
                           <input
-                            min={0}
-                            disabled
                             value={quotation.femaleWorkers}
-                            onChange={handleChangeServicePrice}
+                            onChange={handleChangeQuotation}
                             type="number"
-                            name="deliveryPrice"
+                            name="femaleWorkers"
                             className="form-control"
                             id="femaleWorkers"
-                            placeholder="Female workers"
+                            placeholder="0"
                           />
                         </div>
                       </div>
@@ -517,7 +514,8 @@ function EditEventSubscription(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={quotation.totalWorkers}
+                            value={(parseInt(`${quotation.maleWorkers}`) + parseInt(`${quotation.femaleWorkers}`)) ? 
+                                   (parseInt(`${quotation.maleWorkers}`) + parseInt(`${quotation.femaleWorkers}`)) : 0}
                             onChange={handleChangeQuotation}
                             type="text"
                             name="title"
