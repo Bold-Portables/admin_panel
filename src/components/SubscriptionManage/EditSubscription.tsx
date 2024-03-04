@@ -35,8 +35,6 @@ function EditQuotation(props: MyComponentProps) {
   const {
     setLoading,
     subscriptionId,
-    quotationType,
-    quotationId,
     modal,
     closeModal,
     getListingData,
@@ -221,8 +219,6 @@ function EditQuotation(props: MyComponentProps) {
     const updatedCost = calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice
 
     let payload: any = {
-      quotationId: quotationId,
-      quotationType: quotationType,
       costDetails: servicesPrice, 
       updatedCost: updatedCost,
     };

@@ -39,8 +39,6 @@ function EditEventSubscription(props: MyComponentProps) {
   const {
     setLoading,
     subscriptionId,
-    quotationId,
-    quotationType,
     modal,
     closeModal,
     getListingData,
@@ -172,7 +170,7 @@ function EditEventSubscription(props: MyComponentProps) {
             const quotationData = resData;
             const costDetails = resData?.costDetails;
             const vipSectionData = resData?.vipSection;
-            // setEventDetails(resData.eventDetails)
+            setEventDetails(resData.eventDetails)
             setSubscription(response.data.data.subscription)
 
             userFields.forEach((field) => {
@@ -214,9 +212,18 @@ function EditEventSubscription(props: MyComponentProps) {
       });
   };
 
-  const handleSelectChange = (e: any) => {
+  const handleSelectChange = (e: any, vip:boolean = false) => {
     const { name, value } = e.target;
-    setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }));
+
+    if (vip) {
+        setVipSection((prev) => ({...prev, [name]: value === 'yes' ? true : false}));
+        if (value === 'no') {
+            setServicesPrice((prev) => ({...prev, [name]: 0}))
+          }
+        
+    } else {
+        setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }));
+    }
 
     let cost: string
 
@@ -227,10 +234,17 @@ function EditEventSubscription(props: MyComponentProps) {
       case 'twiceWeeklyService':
         cost = 'twiceWeeklyServicing';
         break;
+      case 'alcoholServed':
+        cost = 'alcoholServed';
+        break;
       default:
         cost = `${name}Cost`;
     }
-}
+
+    if (value === 'no') {
+      setServicesPrice((prev) => ({...prev, [cost]: 0}))
+    }
+  }
 
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -256,10 +270,9 @@ function EditEventSubscription(props: MyComponentProps) {
     const updatedCost = calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice
 
     let payload: any = {
-        quotationId: quotationId,
-        quotationType: quotationType,
         costDetails: servicesPrice, 
         updatedCost: updatedCost,
+        vipSection: vipSection
       };
 
     setLoading(true);
@@ -314,7 +327,7 @@ function EditEventSubscription(props: MyComponentProps) {
             <em className="icon ni ni-cross-sm"></em>
           </a>
           <div className="modal-body modal-body-md">
-            <h5 className="title">Edit Event Quotation</h5>
+            <h5 className="title">Edit Subscription</h5>
             <ul className="nk-nav nav nav-tabs">
               <li className="nav-item">
                 <a
@@ -629,15 +642,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Use At Night
                           </label>
-                          <input
-                            disabled
-                            value={quotation.useAtNight ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="useAtNight"
+                            value={quotation.useAtNight ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -668,15 +682,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Use In Winter
                           </label>
-                          <input
-                            disabled
-                            value={quotation.useInWinter ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="useInWinter"
+                            value={quotation.useInWinter ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -708,7 +723,6 @@ function EditEventSubscription(props: MyComponentProps) {
                             Number of units
                           </label>
                           <input
-                            disabled
                             value={quotation.numUnits}
                             onChange={handleChangeQuotation}
                             type="text"
@@ -767,15 +781,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Handwashing
                           </label>
-                          <input
-                            disabled
-                            value={quotation.handwashing ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="handwashing"
+                            value={quotation.handwashing ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -806,15 +821,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Hand Sanitizer Pump
                           </label>
-                          <input
-                            disabled
-                            value={quotation.handSanitizerPump ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="handSanitizerPump"
+                            value={quotation.handSanitizerPump ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -845,15 +861,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Twice Weekly Service
                           </label>
-                          <input
-                            disabled
-                            value={quotation.twiceWeeklyService ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="twiceWeeklyService"
+                            value={quotation.twiceWeeklyService ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -884,15 +901,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Alcohol Served
                           </label>
-                          <input
-                            disabled
-                            value={quotation.alcoholServed ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="alcoholServed"
+                            value={quotation.alcoholServed ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -923,15 +941,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Pay Per Use
                           </label>
-                          <input
-                            disabled
-                            value={vipSection.payPerUse ? "Yes" : "No"}
-                            onChange={handleChangeVipSection}
-                            type="text"
+                          <select
+                            required
                             name="payPerUse"
+                            value={vipSection.payPerUse ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -963,15 +982,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Fenced Off
                           </label>
-                          <input
-                            disabled
-                            value={vipSection.fencedOff ? "Yes" : "No"}
-                            onChange={handleChangeVipSection}
-                            type="text"
+                          <select
+                            required
                             name="fencedOff"
+                            value={vipSection.fencedOff ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -1002,15 +1022,16 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Actively Cleaned
                           </label>
-                          <input
-                            disabled
-                            value={vipSection.activelyCleaned ? "Yes" : "No"}
-                            onChange={handleChangeVipSection}
-                            type="text"
+                          <select
+                            required
                             name="activelyCleaned"
+                            value={vipSection.activelyCleaned ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -1128,7 +1149,7 @@ function EditEventSubscription(props: MyComponentProps) {
                           />
                         </div>
                       </div>
-                      
+
                     {/* <div className="col-md-5">
                         <div className="form-group">
                             <input
