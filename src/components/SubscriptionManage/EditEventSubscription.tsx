@@ -161,7 +161,6 @@ function EditEventSubscription(props: MyComponentProps) {
 
   const getProductDetailsData = async () => {
     setLoading(true);
-    const payload = { quote_id: quotationId };
     await authAxios()
       .get(`/payment/admin/subscription-detail/${subscriptionId}`)
       .then(
@@ -215,6 +214,24 @@ function EditEventSubscription(props: MyComponentProps) {
       });
   };
 
+  const handleSelectChange = (e: any) => {
+    const { name, value } = e.target;
+    setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }));
+
+    let cost: string
+
+    switch (name) {
+      case 'handwashing':
+        cost = 'handWashingCost';
+        break;
+      case 'twiceWeeklyService':
+        cost = 'twiceWeeklyServicing';
+        break;
+      default:
+        cost = `${name}Cost`;
+    }
+}
+
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setQuotation((prev) => ({ ...prev, [name]: value }));
@@ -235,14 +252,19 @@ function EditEventSubscription(props: MyComponentProps) {
     setServicesPrice((prev) => ({ ...prev, [name]: parseInt(value) }));
   };
 
-  const handleSubmit = async (requestType: string) => {
-    let payload: any = { costDetails: servicesPrice };
-    if (requestType === "save") {
-      payload["type"] = "save";
-    }
+  const handleSubmit = async () => {
+    const updatedCost = calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice
+
+    let payload: any = {
+        quotationId: quotationId,
+        quotationType: quotationType,
+        costDetails: servicesPrice, 
+        updatedCost: updatedCost,
+      };
+
     setLoading(true);
     await authAxios()
-      .put(`/quotation/update-quotation-for-event/${quotationId}`, payload)
+      .put(`payment/admin/subscription/${subscriptionId}`, payload)
       .then(
         (response) => {
           setLoading(false);
@@ -1106,41 +1128,51 @@ function EditEventSubscription(props: MyComponentProps) {
                           />
                         </div>
                       </div>
-                      <div className="col-md-3">
+                      
+                    {/* <div className="col-md-5">
                         <div className="form-group">
-                          <label
+                            <input
+                            className="inline"
+                            defaultChecked={true}
+                            onChange={ () => setUpdateImmediately(!updateImmediately)}
+                            type="checkbox"
+                            name="update-immediately"
+                            id="update-immediately"
+                            />
+                            <label
+                            className="form-label inline"
+                            htmlFor="update-immediately"
+                            >
+                            Update immediately
+                            </label>
+                        </div>
+                    </div> */}
+
+                    <div></div>
+
+                    <div className="col-md-3">
+                        <div className="form-group">
+                            <label
                             className="form-label"
                             htmlFor="Delivery Fee"
-                          >
-                            Delivery Fee <span>${servicesPrice.pickUpPrice}</span>
-                          </label>
+                            >
+                            Current invoice <div>${subscription.monthlyCost}</div>
+                            </label>
                         </div>
-                      </div>
-
-                      <div className="col-md-3 total-price">
+                    </div>
+                    <div className="col-md-3">
                         <div className="form-group">
-                          <label
+                            <label
                             className="form-label"
                             htmlFor="Delivery Fee"
-                          >
-                          Monthly Invoice <span>${calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice}</span>
-                          </label>
+                            >
+                            Updated invoice <div>${calculateAnObjValues(servicesPrice) - servicesPrice.pickUpPrice}</div>
+                            </label>
                         </div>
-                      </div>
+                    </div>
 
-                      <div className="col-md-3 total-price">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="Delivery Fee"
-                          >
-                          Initial Invoice <span>${calculateAnObjValues(servicesPrice)}</span>
-                          </label>
-                        </div>
-                      </div>
-
-                      <div className="col-12">
-                        <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                    <div className="col-12">
+                      <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
                           <li>
                             <button
                               type="submit"
@@ -1153,19 +1185,10 @@ function EditEventSubscription(props: MyComponentProps) {
                           <li>
                             <button
                               type="button"
-                              onClick={() => handleSubmit("save")}
+                              onClick={() => handleSubmit()}
                               className="btn btn-success"
                             >
                               Save Invoice
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              type="button"
-                              onClick={() => handleSubmit("send invoice")}
-                              className="btn btn-warning"
-                            >
-                              Send Invoice
                             </button>
                           </li>
                           <li>
