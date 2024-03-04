@@ -13,6 +13,8 @@ import ExportConfirmationModal from "../../Common/ConfirmExportModal";
 import { saveInvoiceId, saveQuotation } from "../../Redux/Reducers/appSlice";
 import { useDispatch } from "react-redux";
 import EditSubscription from "./EditSubscription";
+import EditEventSubscription from "./EditEventSubscription";
+import AddServiceFee from "./AddServiceFee";
 
 interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
@@ -42,8 +44,10 @@ function SubscriptionList(props: MyComponentProps) {
   const [saveLocationModal, setSaveLocationModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
   const [editSubscriptionModal, setEditSubscriptionModal] = useState<boolean>(false);
+  const [editEventSubscriptionModal, setEditEventSubscriptionModal] = useState<boolean>(false);
+  const [addServiceFeeModal, setAddServiceFeeModal] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState("");
-  const [subscription, setSubscription] = useState("");
+  const [subscription, setSubscription] = useState({_id: '', quotationId: '', quotationType: ''});
   const [statusName, setStatusName] = useState("");
   const [statusLabel, setStatusLabel] = useState("Status");
   const [trackingID, setTrackingID] = useState("");
@@ -173,9 +177,16 @@ function SubscriptionList(props: MyComponentProps) {
     navigate("/quotation-inventories");
   };
 
+  const handleAddServiceFee = (data: any) => {
+    setSubscription(data);
+    setAddServiceFeeModal(true);
+  }
+
   const handleUpdateSubscription = (data: any) => {
     setSubscription(data);
-    setEditSubscriptionModal(true);
+
+    data.quotationType === 'event' ? 
+    setEditEventSubscriptionModal(true) : setEditSubscriptionModal(true)
   }
 
   return (
@@ -470,13 +481,24 @@ function SubscriptionList(props: MyComponentProps) {
                                     {item.status === "ACTIVE" && (
                                       <li>
                                         <a
-                                          onClick={() => handleUpdateSubscription(item._id)}
+                                          onClick={() => handleUpdateSubscription(item)}
                                         >
-                                          <em className="icon ni ni-coin-alt"></em>
-                                          <span>Update Subscription</span>
+                                          <em className="icon ni ni-edit-alt"></em>
+                                          <span>Edit Subscription</span>
                                         </a>
                                       </li>
                                     )}
+
+                                    {/* {item.status === "ACTIVE" && (
+                                      <li>
+                                        <a
+                                          onClick={() => handleAddServiceFee(item)}
+                                        >
+                                          <em className="icon ni ni-coin-alt"></em>
+                                          <span>Charge Service</span>
+                                        </a>
+                                      </li>
+                                    )} */}
                                   
                                   </ul>
                                 </div>
@@ -504,9 +526,29 @@ function SubscriptionList(props: MyComponentProps) {
       </div>
       {editSubscriptionModal && (
         <EditSubscription
-          subscriptionId={subscription}
+          subscriptionId={subscription._id}
+          quotationId={subscription.quotationId}
+          quotationType={subscription.quotationType}
           modal={editSubscriptionModal}
           closeModal={(isModal: boolean) => setEditSubscriptionModal(isModal)}
+        />
+      )}
+
+      {editEventSubscriptionModal && (
+        <EditEventSubscription
+          subscriptionId={subscription._id}
+          quotationId={subscription.quotationId}
+          quotationType={subscription.quotationType}
+          modal={editEventSubscriptionModal}
+          closeModal={(isModal: boolean) => setEditEventSubscriptionModal(isModal)}
+        />
+      )}
+
+      {addServiceFeeModal && (
+        <AddServiceFee
+          subscriptionId={subscription._id}
+          modal={addServiceFeeModal}
+          closeModal={(isModal: boolean) => setAddServiceFeeModal(isModal)}
         />
       )}
 

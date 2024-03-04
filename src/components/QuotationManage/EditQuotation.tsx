@@ -414,7 +414,7 @@ function EditQuotation(props: MyComponentProps) {
                             name="maleWorkers"
                             className="form-control"
                             id="maleWorkers"
-                            placeholder="DisMale workerstance"
+                            placeholder="0"
                           />
                         </div>
                       </div>
@@ -430,12 +430,12 @@ function EditQuotation(props: MyComponentProps) {
                             min={0}
                             disabled
                             value={quotation.femaleWorkers}
-                            onChange={handleChangeServicePrice}
+                            onChange={handleChangeQuotation}
                             type="number"
-                            name="deliveryPrice"
+                            name="femaleWorkers"
                             className="form-control"
                             id="femaleWorkers"
-                            placeholder="Female workers"
+                            placeholder="0"
                           />
                         </div>
                       </div>

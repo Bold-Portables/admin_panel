@@ -36,3 +36,8 @@ a {
     font-weight: 600
 }
 
+.inline {
+    display: inline;
+    margin: 0 3px 0 3px;
+}
+
