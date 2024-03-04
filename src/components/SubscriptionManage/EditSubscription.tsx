@@ -221,6 +221,7 @@ function EditQuotation(props: MyComponentProps) {
     let payload: any = {
       costDetails: servicesPrice, 
       updatedCost: updatedCost,
+      updatedQuotation: quotation
     };
 
     setLoading(true);
