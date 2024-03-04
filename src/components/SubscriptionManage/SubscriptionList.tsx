@@ -485,7 +485,7 @@ function SubscriptionList(props: MyComponentProps) {
                                       </li>
                                     )}
 
-                                    {item.status === "ACTIVE" && (
+                                    {/* {item.status === "ACTIVE" && (
                                       <li>
                                         <a
                                           onClick={() => handleAddServiceFee(item)}
@@ -494,7 +494,7 @@ function SubscriptionList(props: MyComponentProps) {
                                           <span>Charge Service</span>
                                         </a>
                                       </li>
-                                    )}
+                                    )} */}
                                   
                                   </ul>
                                 </div>
