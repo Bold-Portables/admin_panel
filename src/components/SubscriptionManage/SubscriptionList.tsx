@@ -13,6 +13,7 @@ import ExportConfirmationModal from "../../Common/ConfirmExportModal";
 import { saveInvoiceId, saveQuotation } from "../../Redux/Reducers/appSlice";
 import { useDispatch } from "react-redux";
 import EditSubscription from "./EditSubscription";
+import EditEventSubscription from "./EditEventSubscription";
 import AddServiceFee from "./AddServiceFee";
 
 interface MyComponentProps {
@@ -43,6 +44,7 @@ function SubscriptionList(props: MyComponentProps) {
   const [saveLocationModal, setSaveLocationModal] = useState<boolean>(false);
   const [editModal, setEditModal] = useState<boolean>(false);
   const [editSubscriptionModal, setEditSubscriptionModal] = useState<boolean>(false);
+  const [editEventSubscriptionModal, setEditEventSubscriptionModal] = useState<boolean>(false);
   const [addServiceFeeModal, setAddServiceFeeModal] = useState<boolean>(false);
   const [invoiceData, setInvoiceData] = useState("");
   const [subscription, setSubscription] = useState({_id: '', quotationId: '', quotationType: ''});
@@ -182,7 +184,9 @@ function SubscriptionList(props: MyComponentProps) {
 
   const handleUpdateSubscription = (data: any) => {
     setSubscription(data);
-    setEditSubscriptionModal(true);
+
+    data.quotationType === 'event' ? 
+    setEditEventSubscriptionModal(true) : setEditSubscriptionModal(true)
   }
 
   return (
@@ -527,6 +531,16 @@ function SubscriptionList(props: MyComponentProps) {
           quotationType={subscription.quotationType}
           modal={editSubscriptionModal}
           closeModal={(isModal: boolean) => setEditSubscriptionModal(isModal)}
+        />
+      )}
+
+      {editEventSubscriptionModal && (
+        <EditEventSubscription
+          subscriptionId={subscription._id}
+          quotationId={subscription.quotationId}
+          quotationType={subscription.quotationType}
+          modal={editEventSubscriptionModal}
+          closeModal={(isModal: boolean) => setEditEventSubscriptionModal(isModal)}
         />
       )}
 
