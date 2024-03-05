@@ -317,6 +317,7 @@ function CustomersList(props: MyComponentProps) {
       <NewUserModal
         modal={newUserModal}
         closeModal={(isModal: boolean) => setNewUserModal(isModal)}
+        getCustomerListData={getCustomerListData}
       />
     </>
   );

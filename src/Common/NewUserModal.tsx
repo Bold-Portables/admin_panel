@@ -8,6 +8,7 @@ interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
   modal: boolean;
   closeModal: (isModal: boolean) => void;
+  getCustomerListData: any
 }
 
 function EditSubscription(props: MyComponentProps) {
@@ -15,6 +16,7 @@ function EditSubscription(props: MyComponentProps) {
     setLoading,
     modal,
     closeModal,
+    getCustomerListData,
   } = props;
 
   const [userData, setUserData] = useState({
@@ -41,7 +43,7 @@ function EditSubscription(props: MyComponentProps) {
 
 
   const handleSubmit = async () => {
-    
+
     if (Object.values(userData).some(value => value === "")) {
       toast.error("Fill out all fields");
       return;
@@ -57,6 +59,7 @@ function EditSubscription(props: MyComponentProps) {
         (response) => {
           setLoading(false);
           if (response.data.status === 1) {
+            getCustomerListData()
             toast.success(response.data.message);
             closeModal(false);
           } else {
