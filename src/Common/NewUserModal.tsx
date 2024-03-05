@@ -62,6 +62,11 @@ function EditSubscription(props: MyComponentProps) {
             getCustomerListData()
             toast.success(response.data.message);
             closeModal(false);
+            setUserData({
+              name: "",
+              email: "",
+              cellNumber: "",
+            })
           } else {
             toast.error(response.data.message);
           }
