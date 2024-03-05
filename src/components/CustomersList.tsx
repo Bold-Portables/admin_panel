@@ -8,6 +8,7 @@ import Pagination from "../Common/Pagination";
 import { getDateWithoutTime } from "../Helper";
 import { CSVLink } from "react-csv";
 import ExportConfirmationModal from "../Common/ConfirmExportModal";
+import NewUserModal from "../Common/NewUserModal";
 import { saveCustomerId } from "../Redux/Reducers/appSlice";
 import { useDispatch } from "react-redux";
 
@@ -37,6 +38,7 @@ function CustomersList(props: MyComponentProps) {
   const [itemsPerPage, setItemPerPage] = useState<number>(10);
   const [exportData, setExportData] = useState<any[]>([]);
   const [exportModal, setExportModal] = useState<boolean>(false);
+  const [newUserModal, setNewUserModal] = useState<boolean>(false);
   const [inputvalue, setinputvalue] = useState("")
 
   const csvLink = useRef<any>(null);
@@ -166,6 +168,19 @@ function CustomersList(props: MyComponentProps) {
                         data-content="more-options"
                       >
                         <ul className="nk-block-tools g-3">
+                        <li className="nk-block-tools-opt">
+                            <button
+                              type="button"
+                              onClick={() => setNewUserModal(true)}
+                              className="btn btn-primary d-none d-md-inline-flex"
+                            >
+                              <em className="icon ni ni-user-add"></em>
+                              <span>
+                                New user
+                              </span>
+                            </button>
+                          </li>
+
                           <li className="nk-block-tools-opt">
                             <button
                               type="button"
@@ -298,6 +313,11 @@ function CustomersList(props: MyComponentProps) {
         modal={exportModal}
         closeModal={(isModal: boolean) => setExportModal(isModal)}
         handleExportData={getExportingData}
+      />
+      <NewUserModal
+        modal={newUserModal}
+        closeModal={(isModal: boolean) => setNewUserModal(isModal)}
+        getCustomerListData={getCustomerListData}
       />
     </>
   );

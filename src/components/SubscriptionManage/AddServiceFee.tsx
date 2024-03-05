@@ -3,8 +3,6 @@ import { authAxios } from "../../config/config";
 import { toast } from "react-toastify";
 import IsLoadingHOC from "../../Common/IsLoadingHOC";
 import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
-import moment from "moment";
-import { socketService } from "../../config/socketService";
 
 interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
