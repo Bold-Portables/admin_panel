@@ -1,12 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { authAxios } from "../../config/config";
+import { authAxios } from "../config/config";
 import { toast } from "react-toastify";
-import IsLoadingHOC from "../../Common/IsLoadingHOC";
-import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
+import IsLoadingHOC from "./IsLoadingHOC";
+import IsLoggedinHOC from "./IsLoggedInHOC";
 
 interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
-  subscriptionId: string;
   modal: boolean;
   closeModal: (isModal: boolean) => void;
 }
@@ -14,7 +13,6 @@ interface MyComponentProps {
 function EditSubscription(props: MyComponentProps) {
   const {
     setLoading,
-    subscriptionId,
     modal,
     closeModal,
   } = props;
@@ -26,10 +24,6 @@ function EditSubscription(props: MyComponentProps) {
     upgradedCost: 0,
   });
 
-  useEffect(() => {
-    getSubscriptionData();
-  }, []);
-
   const handleUpgradeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setUpgradeAmount(value);
@@ -38,27 +32,6 @@ function EditSubscription(props: MyComponentProps) {
   const handleDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setDescription(value);
-  };
-
-  const getSubscriptionData = async () => {
-    setLoading(true);
-    await authAxios()
-      .get(`/payment/admin/subscription-detail/${subscriptionId}`)
-      .then(
-        (response) => {
-          setLoading(false);
-          if (response.data.status === 1) {
-            setSubscription(response.data.data.subscription)
-          }
-        },
-        (error) => {
-          setLoading(false);
-          toast.error(error.response.data.message);
-        }
-      )
-      .catch((error) => {
-        console.log("errorrrr", error);
-      });
   };
 
   const handleSubmit = async () => {
@@ -70,7 +43,7 @@ function EditSubscription(props: MyComponentProps) {
     setLoading(true);
     
     await authAxios()
-      .post(`payment/admin/subscription-fee/${subscriptionId}`, payload)
+      .post(`endpoint`, payload)
       .then(
         (response) => {
           setLoading(false);

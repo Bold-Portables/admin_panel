@@ -37,6 +37,7 @@ function CustomersList(props: MyComponentProps) {
   const [itemsPerPage, setItemPerPage] = useState<number>(10);
   const [exportData, setExportData] = useState<any[]>([]);
   const [exportModal, setExportModal] = useState<boolean>(false);
+  const [newUserModal, setNewUserModal] = useState<boolean>(false);
   const [inputvalue, setinputvalue] = useState("")
 
   const csvLink = useRef<any>(null);
@@ -166,6 +167,19 @@ function CustomersList(props: MyComponentProps) {
                         data-content="more-options"
                       >
                         <ul className="nk-block-tools g-3">
+                        <li className="nk-block-tools-opt">
+                            <button
+                              type="button"
+                              onClick={() => setNewUserModal(true)}
+                              className="btn btn-primary d-none d-md-inline-flex"
+                            >
+                              <em className="icon ni ni-user-add"></em>
+                              <span>
+                                New user
+                              </span>
+                            </button>
+                          </li>
+
                           <li className="nk-block-tools-opt">
                             <button
                               type="button"
