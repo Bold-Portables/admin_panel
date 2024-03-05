@@ -41,6 +41,12 @@ function EditSubscription(props: MyComponentProps) {
 
 
   const handleSubmit = async () => {
+    
+    if (Object.values(userData).some(value => value === "")) {
+      toast.error("Fill out all fields");
+      return;
+    }
+
     let payload: any = {userData: userData};
 
     setLoading(true);
