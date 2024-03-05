@@ -8,6 +8,7 @@ import Pagination from "../Common/Pagination";
 import { getDateWithoutTime } from "../Helper";
 import { CSVLink } from "react-csv";
 import ExportConfirmationModal from "../Common/ConfirmExportModal";
+import NewUserModal from "../Common/NewUserModal";
 import { saveCustomerId } from "../Redux/Reducers/appSlice";
 import { useDispatch } from "react-redux";
 
@@ -312,6 +313,10 @@ function CustomersList(props: MyComponentProps) {
         modal={exportModal}
         closeModal={(isModal: boolean) => setExportModal(isModal)}
         handleExportData={getExportingData}
+      />
+      <NewUserModal
+        modal={newUserModal}
+        closeModal={(isModal: boolean) => setNewUserModal(isModal)}
       />
     </>
   );

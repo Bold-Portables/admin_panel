@@ -17,27 +17,32 @@ function EditSubscription(props: MyComponentProps) {
     closeModal,
   } = props;
 
-  const [upgradeAmount, setUpgradeAmount] = useState<string>('0');
-  const [description, setDescription] = useState<string>('');
-  const [subscription, setSubscription] = useState({
-    monthlyCost: 0,
-    upgradedCost: 0,
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
   });
 
-  const handleUpgradeAmount = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setUpgradeAmount(value);
+  const handleUserData = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setUserData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleDescription = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setDescription(value);
+  const handleChangePhone = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    const sanitizedValue = value.replace(/[^0-9-+]/g, ""); // Remove non-numeric, non-hyphen, and non-plus characters
+    if (sanitizedValue.match(/^\+?[0-9-]*$/)) {
+      setUserData((prev) => ({
+        ...prev,
+        [name]: sanitizedValue,
+      }));
+    }
   };
+
 
   const handleSubmit = async () => {
     let payload: any = { 
-      upgradeAmount: upgradeAmount, 
-      description: description 
     };
 
     setLoading(true);
@@ -48,8 +53,6 @@ function EditSubscription(props: MyComponentProps) {
         (response) => {
           setLoading(false);
           if (response.data.status === 1) {
-            setUpgradeAmount('0')
-            setDescription('')
             toast.success(response.data.message);
             closeModal(false);
           } else {
@@ -84,7 +87,7 @@ function EditSubscription(props: MyComponentProps) {
             <em className="icon ni ni-cross-sm"></em>
           </a>
           <div className="modal-body modal-body-md">
-            <h5 className="title">Charge Service Fee</h5>
+            <h5 className="title">Add new user</h5>
             <hr></hr>
          
             <div className="tab-content">
@@ -96,74 +99,86 @@ function EditSubscription(props: MyComponentProps) {
                         <div className="form-group">
                           <label
                             className="form-label"
-                            htmlFor="personal-email"
+                            htmlFor="name"
                           >
-                            Price per month
+                            Name
                           </label>
                           <input
-                            disabled
-                            value={subscription.monthlyCost || ''}
+                            required
+                            value={userData.name}
+                            onChange={handleUserData}
                             type="text"
-                            name="distanceFromKelowna"
+                            name="name"
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Price per month"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-5">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Upgrade amount
-                          </label>
-                          <input
-                            min={0}
-                            value={upgradeAmount}
-                            onChange={handleUpgradeAmount}
-                            type="number"
-                            name="upgradeAmount"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
-                        </div>
-                      </div>
-                      <div className="col-md-10">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="personal-email"
-                          >
-                            Description
-                          </label>
-                          <input
-                            min={0}
-                            value={description}
-                            onChange={handleDescription}
-                            type="text"
-                            name="description"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter a brief description..."
+                            id="name"
+                            placeholder="Name"
                           />
                         </div>
                       </div>
 
-                      <div>
-                        <div className="col-md-5 total-price">
-                            <div className="form-group">
-                            <label
-                                className="form-label"
-                                htmlFor="Delivery Fee"
-                            >
-                                Next invoice <span>${(subscription.upgradedCost + parseInt(upgradeAmount) || subscription.upgradedCost)}</span>
-                            </label>
-                            </div>
+                      <div className="col-md-5">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="email"
+                          >
+                           Email
+                          </label>
+                          <input
+                            required
+                            value={userData.email}
+                            onChange={handleUserData}
+                            type="email"
+                            name="email"
+                            className="form-control"
+                            id="newUserEmail"
+                            placeholder="Email"
+                          />
                         </div>
                       </div>
+
+                      <div className="col-md-5">
+                        <div className="form-group">
+                            <label
+                                className="form-label"
+                                htmlFor="phone"
+                            >
+                            Phone
+                            </label>
+                            <input
+                                required
+                                value={userData.phone}
+                                onChange={handleChangePhone}
+                                type="text"
+                                name="phone"
+                                className="form-control"
+                                id="newUserPhone"
+                                placeholder="Phone"
+                            />
+                        </div>
+                      </div>
+
+                      <div className="col-md-5">
+                        <div className="form-group">
+                            <label
+                                className="form-label"
+                                htmlFor="phone"
+                            >
+                            Address
+                            </label>
+                            <input
+                                required
+                                value={userData.address}
+                                onChange={handleUserData}
+                                type="text"
+                                name="address"
+                                className="form-control"
+                                id="newUserAddress"
+                                placeholder="Address"
+                            />
+                        </div>
+                      </div>
+                      
 
                       <div className="col-12">
                         <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
@@ -173,7 +188,7 @@ function EditSubscription(props: MyComponentProps) {
                               onClick={() => handleSubmit()}
                               className="btn btn-success"
                             >
-                              Update
+                              Add user
                             </button>
                           </li>
                           <li>
