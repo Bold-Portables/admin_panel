@@ -42,13 +42,12 @@ function EditSubscription(props: MyComponentProps) {
 
 
   const handleSubmit = async () => {
-    let payload: any = { 
-    };
+    let payload: any = {userData: userData};
 
     setLoading(true);
     
     await authAxios()
-      .post(`endpoint`, payload)
+      .post("/user/create-user", payload)
       .then(
         (response) => {
           setLoading(false);
