@@ -20,8 +20,7 @@ function EditSubscription(props: MyComponentProps) {
   const [userData, setUserData] = useState({
     name: "",
     email: "",
-    phone: "",
-    address: "",
+    cellNumber: "",
   });
 
   const handleUserData = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,120 +87,77 @@ function EditSubscription(props: MyComponentProps) {
           <div className="modal-body modal-body-md">
             <h5 className="title">Add new user</h5>
             <hr></hr>
-         
             <div className="tab-content">
               {(
                 <div className="tab-pane active">
                   <form>
-                    <div className="row gy-4">
-                    <div className="col-md-5">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="name"
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="name">
+                        Name
+                      </label>
+                      <input
+                        required
+                        value={userData.name}
+                        onChange={handleUserData}
+                        type="text"
+                        name="name"
+                        className="form-control"
+                        id="name"
+                        placeholder="Name"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="email">
+                        Email
+                      </label>
+                      <input
+                        required
+                        value={userData.email}
+                        onChange={handleUserData}
+                        type="email"
+                        name="email"
+                        className="form-control"
+                        id="newUserEmail"
+                        placeholder="Email"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <label className="form-label" htmlFor="cellNumber">
+                        Phone
+                      </label>
+                      <input
+                        required
+                        value={userData.cellNumber}
+                        onChange={handleChangePhone}
+                        type="text"
+                        name="cellNumber"
+                        className="form-control"
+                        id="newUserPhone"
+                        placeholder="Phone"
+                      />
+                    </div>
+                    <div className="form-group">
+                      <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
+                        <li>
+                          <button
+                            type="button"
+                            onClick={() => handleSubmit()}
+                            className="btn btn-success"
                           >
-                            Name
-                          </label>
-                          <input
-                            required
-                            value={userData.name}
-                            onChange={handleUserData}
-                            type="text"
-                            name="name"
-                            className="form-control"
-                            id="name"
-                            placeholder="Name"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-md-5">
-                        <div className="form-group">
-                          <label
-                            className="form-label"
-                            htmlFor="email"
+                            Add user
+                          </button>
+                        </li>
+                        <li>
+                          <button
+                            onClick={() => closeModal(false)}
+                            type="button"
+                            data-bs-dismiss="modal"
+                            className="link link-light"
                           >
-                           Email
-                          </label>
-                          <input
-                            required
-                            value={userData.email}
-                            onChange={handleUserData}
-                            type="email"
-                            name="email"
-                            className="form-control"
-                            id="newUserEmail"
-                            placeholder="Email"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="col-md-5">
-                        <div className="form-group">
-                            <label
-                                className="form-label"
-                                htmlFor="phone"
-                            >
-                            Phone
-                            </label>
-                            <input
-                                required
-                                value={userData.phone}
-                                onChange={handleChangePhone}
-                                type="text"
-                                name="phone"
-                                className="form-control"
-                                id="newUserPhone"
-                                placeholder="Phone"
-                            />
-                        </div>
-                      </div>
-
-                      <div className="col-md-5">
-                        <div className="form-group">
-                            <label
-                                className="form-label"
-                                htmlFor="phone"
-                            >
-                            Address
-                            </label>
-                            <input
-                                required
-                                value={userData.address}
-                                onChange={handleUserData}
-                                type="text"
-                                name="address"
-                                className="form-control"
-                                id="newUserAddress"
-                                placeholder="Address"
-                            />
-                        </div>
-                      </div>
-                      
-
-                      <div className="col-12">
-                        <ul className="align-center flex-wrap flex-sm-nowrap gx-4 gy-2">
-                          <li>
-                            <button
-                              type="button"
-                              onClick={() => handleSubmit()}
-                              className="btn btn-success"
-                            >
-                              Add user
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              onClick={() => closeModal(false)}
-                              type="button"
-                              data-bs-dismiss="modal"
-                              className="link link-light"
-                            >
-                              Cancel
-                            </button>
-                          </li>
-                        </ul>
-                      </div>
+                            Cancel
+                          </button>
+                        </li>
+                      </ul>
                     </div>
                   </form>
                 </div>
@@ -212,6 +168,7 @@ function EditSubscription(props: MyComponentProps) {
       </div>
     </div>
   );
+  
 }
 
 export default IsLoadingHOC(IsLoggedinHOC(EditSubscription));
