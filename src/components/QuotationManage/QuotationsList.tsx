@@ -30,6 +30,7 @@ const QuotationsList = (props: MyComponentProps) => {
   const [editModal, setEditModal] = useState<boolean>(false);
   const [editEventModal, setEditEventModal] = useState<boolean>(false);
   const [cancelModal, setCancelModal] = useState<boolean>(false);
+  const [newQuotationModal, setNewQuotationModal] = useState<boolean>(false);
 
   const [quotationLabel, setQuotationLabel] = useState<string>("All");
   const [quotationCategory, setQuotationCategory] = useState<string>("all");
@@ -161,6 +162,18 @@ const QuotationsList = (props: MyComponentProps) => {
                       data-content="pageMenu"
                     >
                       <ul className="nk-block-tools g-3">
+                      <li className="nk-block-tools-opt">
+                          <button
+                            type="button"
+                            onClick={() => setNewQuotationModal(true)}
+                            className="btn btn-primary d-none d-md-inline-flex"
+                          >
+                            <em className="icon ni ni-note-add"></em>
+                            <span>
+                              New quotation
+                            </span>
+                          </button>
+                        </li>
                         <li>
                           <div className="drodown">
                             <a
