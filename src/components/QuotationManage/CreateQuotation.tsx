@@ -176,6 +176,11 @@ function CreateQuotation(props: MyComponentProps) {
                   setCoordinator(defaultCoordinator)
   };
 
+  const handleSelectQuoteType = (e: any) => {
+    const { value } = e.target
+    setQuotationType(value)
+  }
+
   const handleChangeServicePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setServicesPrice((prev) => ({ ...prev, [name]: parseInt(value) }));
@@ -276,7 +281,7 @@ function CreateQuotation(props: MyComponentProps) {
                 <div className="tab-pane active">
                   <form>
                     <div className="row gy-4">
-                      <div className="col-md-6">
+                      <div className="col-md-12">
                         <div className="form-group">
                           <label className="form-label" htmlFor="full-name">
                             User
@@ -320,6 +325,32 @@ function CreateQuotation(props: MyComponentProps) {
                             id="inputEmail4"
                             placeholder="Email address"
                           />
+                        </div>
+                      </div>
+                      <div className="col-md-6">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Quote Type
+                          </label>
+                          <select
+                            required
+                            name="quotationType"
+                            value={quotationType}
+                            className="form-control"
+                            onChange={handleSelectQuoteType}
+                          >
+                            <option value="">Select type</option>
+                            <option value="construction">Construction</option>
+                            <option value="disaster-relief">Disaster Relief</option>
+                            <option value="personal-business-site">Individual Needs</option>
+                            <option value="farm-orchard-winery">Farm Orchard Winery</option>
+                            <option value="event">Special Events</option>
+                            <option value="recreational-site">Recreational Sites</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
