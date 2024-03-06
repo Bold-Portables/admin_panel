@@ -5,6 +5,7 @@ import { toast } from "react-toastify";
 import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import EditQuotation from "./EditQuotation";
 import EditEventQuotation from "./EditEventQuotation";
+import CreateQuotation from "./CreateQuotation";
 import Pagination from "../../Common/Pagination";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -29,8 +30,8 @@ const QuotationsList = (props: MyComponentProps) => {
 
   const [editModal, setEditModal] = useState<boolean>(false);
   const [editEventModal, setEditEventModal] = useState<boolean>(false);
+  const [createModal, setCreateModal] = useState<boolean>(false);
   const [cancelModal, setCancelModal] = useState<boolean>(false);
-  const [newQuotationModal, setNewQuotationModal] = useState<boolean>(false);
 
   const [quotationLabel, setQuotationLabel] = useState<string>("All");
   const [quotationCategory, setQuotationCategory] = useState<string>("all");
@@ -165,7 +166,7 @@ const QuotationsList = (props: MyComponentProps) => {
                       <li className="nk-block-tools-opt">
                           <button
                             type="button"
-                            onClick={() => setNewQuotationModal(true)}
+                            onClick={() => setCreateModal(true)}
                             className="btn btn-primary d-none d-md-inline-flex"
                           >
                             <em className="icon ni ni-note-add"></em>
@@ -442,6 +443,13 @@ const QuotationsList = (props: MyComponentProps) => {
                   itemsPerPage={itemsPerPage}
                   onChangePageLimit={(page: number) => setItemPerPage(page)}
                   resData={quotationData}
+                />
+              )}
+              {createModal && (
+                <CreateQuotation
+                  modal={createModal}
+                  getListingData={getQuotationData}
+                  closeModal={(isModal: boolean) => setEditModal(isModal)}
                 />
               )}
               {editModal && (
