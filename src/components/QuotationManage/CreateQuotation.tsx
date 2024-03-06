@@ -37,11 +37,21 @@ function CreateQuotation(props: MyComponentProps) {
   } = props;
 
   const [activeStep, setActiveStep] = useState<number>(1);
+
   const [coordinator, setCoordinator] = useState({
     name: "",
     email: "",
     cellNumber: "",
   });
+
+  const [coordinators, setCoordinators] = useState([
+    {
+      name: "",
+      email: "",
+      cellNumber: "",
+    }
+  ]);
+
   const [quotation, setQuotation] = useState({
     maxWorkers: "",
     weeklyHours: "",
@@ -82,7 +92,7 @@ function CreateQuotation(props: MyComponentProps) {
   });
 
   useEffect(() => {
-    
+    getCustomerListData()
   }, []);
 
   const userFields = ["name", "email", "cellNumber"];
@@ -123,6 +133,30 @@ function CreateQuotation(props: MyComponentProps) {
     "weeklyHoursCost",
     "pickUpPrice",
   ];
+
+  const getCustomerListData = async () => {
+    setLoading(true);
+
+    // temporary axios call
+    await authAxios()
+      .get(`/auth/get-all-users?page=${1}&limit=${100}`)
+      .then(
+        (response) => {
+          setLoading(false);
+          if (response.data.status === 1) {
+            const resData = response.data.data;
+            setCoordinators(resData.users);
+          }
+        },
+        (error) => {
+          setLoading(false);
+          toast.error(error.response.data.message);
+        }
+      )
+      .catch((error) => {
+        console.log("errorrrr", error);
+      });
+  };
 
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -168,7 +202,7 @@ function CreateQuotation(props: MyComponentProps) {
             });
             toast.success(response.data.message);
             closeModal(false);
-            // getListingData();
+            getListingData();
           } else {
             toast.error(response.data.message);
           }

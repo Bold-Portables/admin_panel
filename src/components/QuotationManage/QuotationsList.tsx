@@ -449,7 +449,7 @@ const QuotationsList = (props: MyComponentProps) => {
                 <CreateQuotation
                   modal={createModal}
                   getListingData={getQuotationData}
-                  closeModal={(isModal: boolean) => setEditModal(isModal)}
+                  closeModal={(isModal: boolean) => setCreateModal(isModal)}
                 />
               )}
               {editModal && (
