@@ -279,11 +279,15 @@ function CreateQuotation(props: MyComponentProps) {
                       <div className="col-md-6">
                         <div className="form-group">
                           <label className="form-label" htmlFor="full-name">
-                            User Name
+                            User
                           </label>
                           <Select 
                             onChange={handleSelectUser} 
                             isClearable={true}
+                            placeholder="Search by name or email"
+                            formatOptionLabel={(option, { context }) => {
+                              return context === 'menu' ? `${option.label}` : `${option.label_input}`;
+                            }}
                             theme={(theme) => ({
                               ...theme,
                               borderRadius: 0,
@@ -293,7 +297,9 @@ function CreateQuotation(props: MyComponentProps) {
                                 primary: '#854fff',
                               },
                             })}
-                            options={coordinators.map((user) => ({ value: user._id, label: `${user.name}` }))} />
+                            options={coordinators.map((user) => ({ value: user._id, 
+                                                                   label: `${user.name} - ${user.email}`, 
+                                                                   label_input: `${user.name}`}))} />
                         </div>
                       </div>
                       <div className="col-md-6">
