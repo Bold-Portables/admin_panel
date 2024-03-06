@@ -38,19 +38,14 @@ function CreateQuotation(props: MyComponentProps) {
 
   const [activeStep, setActiveStep] = useState<number>(1);
 
-  const [coordinator, setCoordinator] = useState({
+  const defaultCoordinator = {
+    _id: "",
     name: "",
     email: "",
-    cellNumber: "",
-  });
-
-  const [coordinators, setCoordinators] = useState([
-    {
-      name: "",
-      email: "",
-      cellNumber: "",
-    }
-  ]);
+    mobile: "",
+  }
+  const [coordinator, setCoordinator] = useState(defaultCoordinator);
+  const [coordinators, setCoordinators] = useState([defaultCoordinator]);
 
   const [quotation, setQuotation] = useState({
     maxWorkers: "",
@@ -168,6 +163,14 @@ function CreateQuotation(props: MyComponentProps) {
     setCoordinator((prev) => ({ ...prev, [name]: value }));
   };
 
+  const handleSelectUser = (e: any) => {
+    const { value } = e.target;
+    const coordinator = coordinators.find(user => user._id === value);
+
+    coordinator ? setCoordinator(coordinator) :
+                  setCoordinator(defaultCoordinator)
+  };
+
   const handleChangeServicePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setServicesPrice((prev) => ({ ...prev, [name]: parseInt(value) }));
@@ -273,16 +276,18 @@ function CreateQuotation(props: MyComponentProps) {
                           <label className="form-label" htmlFor="full-name">
                             User Name
                           </label>
-                          <input
-                            value={coordinator.name}
-                            onChange={handleChangeCoordinator}
-                            type="text"
-                            disabled
-                            name="name"
+                          <select
+                            required
+                            name="coordinator"
+                            value={coordinator._id}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="User name"
-                          />
+                            onChange={handleSelectUser}
+                          >
+                            <option value="">Select a user</option>
+                            {coordinators.map(user => (
+                            <option key={user._id} value={user._id || ''}>{user.name}</option>
+                            ))}
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -315,7 +320,7 @@ function CreateQuotation(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={coordinator.cellNumber}
+                            value={coordinator.mobile}
                             onChange={handleChangeCoordinator}
                             type="text"
                             name="cellNumber"
