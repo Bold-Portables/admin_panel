@@ -3,6 +3,7 @@ import { authAxios } from "../../config/config";
 import { toast } from "react-toastify";
 import IsLoadingHOC from "../../Common/IsLoadingHOC";
 import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
+import Select from "react-select";
 import moment from "moment";
 import { socketService } from "../../config/socketService";
 
@@ -134,7 +135,7 @@ function CreateQuotation(props: MyComponentProps) {
 
     // temporary axios call
     await authAxios()
-      .get(`/auth/get-all-users?page=${1}&limit=${100}`)
+      .get(`/auth/get-all-users?page=${1}&limit=${1000}`)
       .then(
         (response) => {
           setLoading(false);
@@ -164,8 +165,12 @@ function CreateQuotation(props: MyComponentProps) {
   };
 
   const handleSelectUser = (e: any) => {
-    const { value } = e.target;
-    const coordinator = coordinators.find(user => user._id === value);
+    if (!e) {
+      setCoordinator(defaultCoordinator)
+      return
+    }
+
+    const coordinator = coordinators.find(user => user._id === e.value);
 
     coordinator ? setCoordinator(coordinator) :
                   setCoordinator(defaultCoordinator)
@@ -276,18 +281,19 @@ function CreateQuotation(props: MyComponentProps) {
                           <label className="form-label" htmlFor="full-name">
                             User Name
                           </label>
-                          <select
-                            required
-                            name="coordinator"
-                            value={coordinator._id}
-                            className="form-control"
-                            onChange={handleSelectUser}
-                          >
-                            <option value="">Select a user</option>
-                            {coordinators.map(user => (
-                            <option key={user._id} value={user._id || ''}>{user.name}</option>
-                            ))}
-                          </select>
+                          <Select 
+                            onChange={handleSelectUser} 
+                            isClearable={true}
+                            theme={(theme) => ({
+                              ...theme,
+                              borderRadius: 0,
+                              colors: {
+                                ...theme.colors,
+                                primary25: '#f4f6f9',
+                                primary: '#854fff',
+                              },
+                            })}
+                            options={coordinators.map((user) => ({ value: user._id, label: `${user.name}` }))} />
                         </div>
                       </div>
                       <div className="col-md-6">
