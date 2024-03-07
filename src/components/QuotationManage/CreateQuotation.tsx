@@ -91,45 +91,6 @@ function CreateQuotation(props: MyComponentProps) {
     getCustomerListData()
   }, []);
 
-  const userFields = ["name", "email", "cellNumber"];
-
-  const QuotationFields = [
-    "maxWorkers",
-    "serviceFrequency",
-    "special_requirements",
-    "distanceFromKelowna",
-    "useAtNight",
-    "useInWinter",
-    "numUnits",
-    "designatedWorkers",
-    "workerTypes",
-    "handwashing",
-    "handSanitizerPump",
-    "twiceWeeklyService",
-    "placementDate",
-    "dateTillUse",
-    "status",
-    "weeklyHours",
-    "maleWorkers",
-    "femaleWorkers",
-    "totalWorkers",
-  ];
-
-  const servicePriceFields = [
-    "workersCost",
-    "deliveryPrice",
-    "specialRequirementsCost",
-    "numberOfUnitsCost",
-    "useAtNightCost",
-    "useInWinterCost",
-    "handWashingCost",
-    "handSanitizerPumpCost",
-    "twiceWeeklyServicing",
-    "serviceFrequencyCost",
-    "weeklyHoursCost",
-    "pickUpPrice",
-  ];
-
   const getCustomerListData = async () => {
     setLoading(true);
 
@@ -212,24 +173,9 @@ function CreateQuotation(props: MyComponentProps) {
 
   const handleSubmit = async (requestType: string) => {
     let payload: any = { costDetails: servicesPrice };
-    if (requestType === "save") {
-      payload["type"] = "save";
-    }
-    let endPoint: string = "quotation/update-quotation-for-construction";
-    if (quotationType === "construction") {
-      endPoint = "quotation/update-quotation-for-construction";
-    } else if (quotationType === "disaster-relief") {
-      endPoint = "quotation/update-quotation-for-disaster-relief";
-    } else if (quotationType === "farm-orchard-winery") {
-      endPoint = "quotation/update-quotation-for-farm-orchard-winery";
-    } else if (quotationType === "personal-or-business") {
-      endPoint = "quotation/update-quotation-for-personal-business-site";
-    } else if (quotationType === "recreational-site") {
-      endPoint = "quotation/update-quotation-for-recreational-site";
-    }
     setLoading(true);
     await authAxios()
-      .put(`/${endPoint}`, payload)
+      .put(`/quotation/create-quotation-for-${quotationType}`, payload)
       .then(
         (response) => {
           setLoading(false);
@@ -642,7 +588,7 @@ function CreateQuotation(props: MyComponentProps) {
                 <div className="tab-pane active">
                   <form>
                     <div className="row gy-4">
-                      <div className="col-md-3">
+                    <div className="col-md-3">
                         <div className="form-group">
                           <label
                             className="form-label"
@@ -650,16 +596,16 @@ function CreateQuotation(props: MyComponentProps) {
                           >
                             Use At Night
                           </label>
-                          <input
-                            disabled
-                            value={quotation.useAtNight ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="useAtNight"
+                            value={quotation.useAtNight ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -673,7 +619,7 @@ function CreateQuotation(props: MyComponentProps) {
                           <input
                             min={0}
                             disabled={!quotation.useAtNight}
-                            value={servicesPrice.useAtNightCost}
+                            value={quotation.useAtNight ? servicesPrice.useAtNightCost : 0}
                             onChange={handleChangeServicePrice}
                             type="number"
                             name="useAtNightCost"
@@ -691,16 +637,16 @@ function CreateQuotation(props: MyComponentProps) {
                           >
                             Use In Winter
                           </label>
-                          <input
-                            disabled
-                            value={quotation.useInWinter ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="useInWinter"
+                            value={quotation.useInWinter ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -733,7 +679,6 @@ function CreateQuotation(props: MyComponentProps) {
                             Number of units
                           </label>
                           <input
-                            disabled
                             value={quotation.numUnits}
                             onChange={handleChangeQuotation}
                             type="text"
@@ -796,16 +741,16 @@ function CreateQuotation(props: MyComponentProps) {
                           >
                             Handwashing
                           </label>
-                          <input
-                            disabled
-                            value={quotation.handwashing ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="handwashing"
+                            value={quotation.handwashing ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Enter Price"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -837,16 +782,16 @@ function CreateQuotation(props: MyComponentProps) {
                           >
                             Hand Sanitizer Pump
                           </label>
-                          <input
-                            disabled
-                            value={quotation.handSanitizerPump ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="handSanitizerPump"
+                            value={quotation.handSanitizerPump ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -878,16 +823,16 @@ function CreateQuotation(props: MyComponentProps) {
                           >
                             Twice Weekly Service
                           </label>
-                          <input
-                            disabled
-                            value={quotation.twiceWeeklyService ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="twiceWeeklyService"
+                            value={quotation.twiceWeeklyService ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -960,10 +905,9 @@ function CreateQuotation(props: MyComponentProps) {
                             Service Frequency
                           </label>
                           <input
-                            disabled
                             value={quotation.serviceFrequency}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="serviceFrequency"
                             className="form-control"
                             id="inputEmail4"
@@ -991,6 +935,7 @@ function CreateQuotation(props: MyComponentProps) {
                           />
                         </div>
                       </div>
+
                       <div className="col-md-6">
                         <div className="form-group">
                           <label
