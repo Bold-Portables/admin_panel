@@ -181,6 +181,30 @@ function CreateQuotation(props: MyComponentProps) {
     setQuotationType(value)
   }
 
+  const handleSelectChange = (e: any) => {
+    const { name, value } = e.target;
+    setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : 
+                                               value === 'no' ? false :
+                                               value }));
+
+    let cost: string
+
+    switch (name) {
+      case 'handwashing':
+        cost = 'handWashingCost';
+        break;
+      case 'twiceWeeklyService':
+        cost = 'twiceWeeklyServicing';
+        break;
+      default:
+        cost = `${name}Cost`;
+    }
+
+    if (value === 'no') {
+      setServicesPrice((prev) => ({...prev, [cost]: 0}))
+    }
+  };
+
   const handleChangeServicePrice = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setServicesPrice((prev) => ({ ...prev, [name]: parseInt(value) }));
@@ -381,16 +405,28 @@ function CreateQuotation(props: MyComponentProps) {
                           >
                             Designated Workers
                           </label>
-                          <input
+                          {/* <input
                             disabled
-                            value={quotation.designatedWorkers ? "Yes" : "No"}
+                            value={quotation.designatedWorkers ? "yes" : "no"}
                             onChange={handleChangeQuotation}
                             type="text"
                             name="designatedWorkers"
                             className="form-control"
                             id="inputEmail4"
                             placeholder="Designated workers"
-                          />
+                          /> */}
+
+                          <select
+                            required
+                            name="designatedWorkers"
+                            value={quotation.designatedWorkers ? "yes" : "no"}
+                            className="form-control"
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -401,16 +437,19 @@ function CreateQuotation(props: MyComponentProps) {
                           >
                             Worker Types
                           </label>
-                          <input
-                            disabled
-                            value={quotation.workerTypes}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="workerTypes"
+                            value={quotation.workerTypes}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Worker Types"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="">Select type</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="both">Both</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -443,7 +482,6 @@ function CreateQuotation(props: MyComponentProps) {
                             Male workers
                           </label>
                           <input
-                            disabled
                             value={quotation.maleWorkers}
                             onChange={handleChangeQuotation}
                             type="number"
@@ -464,7 +502,6 @@ function CreateQuotation(props: MyComponentProps) {
                           </label>
                           <input
                             min={0}
-                            disabled
                             value={quotation.femaleWorkers}
                             onChange={handleChangeQuotation}
                             type="number"
@@ -485,7 +522,8 @@ function CreateQuotation(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={quotation.totalWorkers}
+                            value={(parseInt(`${quotation.maleWorkers}`) + parseInt(`${quotation.femaleWorkers}`)) ? 
+                                   (parseInt(`${quotation.maleWorkers}`) + parseInt(`${quotation.femaleWorkers}`)) : 0}
                             onChange={handleChangeQuotation}
                             type="text"
                             name="title"
@@ -504,10 +542,9 @@ function CreateQuotation(props: MyComponentProps) {
                             Distance
                           </label>
                           <input
-                            disabled
                             value={quotation.distanceFromKelowna}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="distanceFromKelowna"
                             className="form-control"
                             id="inputEmail4"
@@ -544,10 +581,9 @@ function CreateQuotation(props: MyComponentProps) {
                             Weekly Hours
                           </label>
                           <input
-                            disabled
                             value={quotation.weeklyHours}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="weeklyHours"
                             className="form-control"
                             id="inputEmail4"
