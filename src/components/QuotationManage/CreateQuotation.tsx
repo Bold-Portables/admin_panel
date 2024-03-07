@@ -171,11 +171,16 @@ function CreateQuotation(props: MyComponentProps) {
     setServicesPrice((prev) => ({ ...prev, [name]: parseInt(value) }));
   };
 
-  const handleSubmit = async (requestType: string) => {
-    let payload: any = { costDetails: servicesPrice };
+  const handleSubmit = async () => {
+    let payload: any = 
+    { 
+      ...quotation,
+      costDetails: servicesPrice,
+      coordinator: coordinator
+    };
     setLoading(true);
     await authAxios()
-      .put(`/quotation/create-quotation-for-${quotationType}`, payload)
+      .post(`/quotation/create-quotation-for-${quotationType}`, payload)
       .then(
         (response) => {
           setLoading(false);
@@ -407,15 +412,13 @@ function CreateQuotation(props: MyComponentProps) {
                             Placement Date
                           </label>
                           <input
-                            disabled
-                            value={moment(quotation.placementDate).format(
-                              "MMMM Do YYYY"
-                            )}
-                            type="text"
+                            value={quotation.placementDate}
+                            type="date"
                             name="placementDate"
                             className="form-control"
                             id="inputEmail4"
                             placeholder="Placement Date"
+                            onChange={handleChangeQuotation}
                           />
                         </div>
                       </div>
@@ -720,12 +723,9 @@ function CreateQuotation(props: MyComponentProps) {
                             Date Till Use
                           </label>
                           <input
-                            disabled
-                            value={moment(quotation.dateTillUse).format(
-                              "MMMM Do YYYY"
-                            )}
+                            value={quotation.dateTillUse}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="date"
                             name="dateTillUse"
                             className="form-control"
                             id="inputEmail4"
@@ -1000,17 +1000,8 @@ function CreateQuotation(props: MyComponentProps) {
                           <li>
                             <button
                               type="button"
-                              onClick={() => handleSubmit("save")}
+                              onClick={handleSubmit}
                               className="btn btn-success"
-                            >
-                              Save Invoice
-                            </button>
-                          </li>
-                          <li>
-                            <button
-                              type="button"
-                              onClick={() => handleSubmit("send invoice")}
-                              className="btn btn-warning"
                             >
                               Send Invoice
                             </button>
