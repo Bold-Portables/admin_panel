@@ -49,11 +49,11 @@ function CreateQuotation(props: MyComponentProps) {
   const [coordinators, setCoordinators] = useState([defaultCoordinator]);
 
   const [quotation, setQuotation] = useState({
-    maxWorkers: "",
-    weeklyHours: "",
+    maxWorkers: 0,
+    weeklyHours: 0,
     serviceFrequency: "",
     special_requirements: "",
-    distanceFromKelowna: "",
+    distanceFromKelowna: 0,
     numUnits: 0,
     workerTypes: "",
     useAtNight: false,
