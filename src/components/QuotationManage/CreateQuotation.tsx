@@ -176,7 +176,8 @@ function CreateQuotation(props: MyComponentProps) {
     { 
       ...quotation,
       costDetails: servicesPrice,
-      coordinator: coordinator
+      coordinator: coordinator,
+      isAdmin: true,
     };
     setLoading(true);
     await authAxios()
