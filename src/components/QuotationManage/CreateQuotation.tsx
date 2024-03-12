@@ -54,6 +54,8 @@ function CreateQuotation(props: MyComponentProps) {
     serviceFrequency: "",
     special_requirements: "",
     distanceFromKelowna: 0,
+    serviceCharge: 0,
+    deliveredPrice: 0,
     numUnits: 0,
     workerTypes: "",
     useAtNight: false,
