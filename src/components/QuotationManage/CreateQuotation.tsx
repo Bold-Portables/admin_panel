@@ -20,6 +20,11 @@ interface ServicesPrice {
   serviceFrequencyCost: number;
   weeklyHoursCost: number;
   pickUpPrice: number;
+  // used by event quotes only
+  alcoholServed : number;
+  payPerUse: number;
+  fencedOff: number;
+  activelyCleaned: number;
 }
 
 interface MyComponentProps {
@@ -70,6 +75,10 @@ function CreateQuotation(props: MyComponentProps) {
     maleWorkers: 0,
     femaleWorkers: 0,
     totalWorkers: 0,
+    alcoholServed: false,
+    payPerUse: false,
+    fencedOff: false,
+    activelyCleaned: false,
   });
 
   const [quotationType, setQuotationType] = useState('')
@@ -87,6 +96,16 @@ function CreateQuotation(props: MyComponentProps) {
     serviceFrequencyCost: 0,
     weeklyHoursCost: 0,
     pickUpPrice: 0,
+    alcoholServed: 0,
+    payPerUse: 0,
+    fencedOff: 0,
+    activelyCleaned: 0,
+  });
+
+  const [vipSection, setVipSection] = useState({
+    payPerUse: false,
+    fencedOff: false,
+    activelyCleaned: false,
   });
 
   useEffect(() => {
@@ -144,11 +163,19 @@ function CreateQuotation(props: MyComponentProps) {
     setQuotationType(value)
   }
 
-  const handleSelectChange = (e: any) => {
+  const handleSelectChange = (e: any, vip: boolean = false) => {
     const { name, value } = e.target;
-    setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : 
-                                               value === 'no' ? false :
-                                               value }));
+
+    if (vip) {
+      setVipSection((prev) => ({...prev, [name]: value === 'yes' ? true : false}));
+        if (value === 'no') {
+            setServicesPrice((prev) => ({...prev, [name]: 0}))
+          }
+    } else {
+      setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : 
+                                                 value === 'no' ? false :
+                                                 value }));
+    }
 
     let cost: string
 
@@ -158,6 +185,9 @@ function CreateQuotation(props: MyComponentProps) {
         break;
       case 'twiceWeeklyService':
         cost = 'twiceWeeklyServicing';
+        break;
+      case 'alcoholServed':
+        cost = 'alcoholServed';
         break;
       default:
         cost = `${name}Cost`;
@@ -865,6 +895,168 @@ function CreateQuotation(props: MyComponentProps) {
                             className="form-label"
                             htmlFor="personal-email"
                           >
+                            Alcohol Served
+                          </label>
+                          <select
+                            required
+                            name="alcoholServed"
+                            value={quotation.alcoholServed ? "yes" : "no"}
+                            className="form-control"
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Cost
+                          </label>
+                          <input
+                            min={0}
+                            value={servicesPrice.alcoholServed}
+                            disabled={!quotation.alcoholServed}
+                            onChange={handleChangeServicePrice}
+                            type="number"
+                            name="alcoholServed"
+                            className="form-control"
+                            placeholder="Enter Price"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Pay Per Use
+                          </label>
+                          <select
+                            required
+                            name="payPerUse"
+                            value={vipSection.payPerUse ? "yes" : "no"}
+                            className="form-control"
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Cost
+                          </label>
+                          <input
+                            min={0}
+                            value={servicesPrice.payPerUse}
+                            disabled={!vipSection.payPerUse}
+                            onChange={handleChangeServicePrice}
+                            type="number"
+                            name="payPerUse"
+                            className="form-control"
+                            id="payPerUse"
+                            placeholder="Enter Price"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Fenced Off
+                          </label>
+                          <select
+                            required
+                            name="fencedOff"
+                            value={vipSection.fencedOff ? "yes" : "no"}
+                            className="form-control"
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Cost
+                          </label>
+                          <input
+                            min={0}
+                            value={servicesPrice.fencedOff}
+                            disabled={!vipSection.fencedOff}
+                            onChange={handleChangeServicePrice}
+                            type="number"
+                            name="fencedOff"
+                            className="form-control"
+                            placeholder="Enter Price"
+                          />
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Actively Cleaned
+                          </label>
+                          <select
+                            required
+                            name="activelyCleaned"
+                            value={vipSection.activelyCleaned ? "yes" : "no"}
+                            className="form-control"
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
+                            Cost
+                          </label>
+                          <input
+                            min={0}
+                            value={servicesPrice.activelyCleaned}
+                            disabled={!vipSection.activelyCleaned}
+                            onChange={handleChangeServicePrice}
+                            type="number"
+                            name="activelyCleaned"
+                            className="form-control"
+                            placeholder="Enter Price"
+                          />
+                        </div>
+                      </div> 
+                      <div className="col-md-3">
+                        <div className="form-group">
+                          <label
+                            className="form-label"
+                            htmlFor="personal-email"
+                          >
                             Special Requirements
                           </label>
                           <input
@@ -889,7 +1081,6 @@ function CreateQuotation(props: MyComponentProps) {
                           <input
                             min={0}
                             value={servicesPrice.specialRequirementsCost}
-                            disabled={!quotation.special_requirements}
                             onChange={handleChangeServicePrice}
                             type="number"
                             name="specialRequirementsCost"

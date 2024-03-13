@@ -212,7 +212,7 @@ function EditEventSubscription(props: MyComponentProps) {
       });
   };
 
-  const handleSelectChange = (e: any, vip:boolean = false) => {
+  const handleSelectChange = (e: any, vip: boolean = false) => {
     const { name, value } = e.target;
 
     if (vip) {
