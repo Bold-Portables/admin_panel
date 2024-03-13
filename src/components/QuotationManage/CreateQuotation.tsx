@@ -889,6 +889,10 @@ function CreateQuotation(props: MyComponentProps) {
                           />
                         </div>
                       </div>
+
+                      {quotationType === 'event' && (
+                      <>
+
                       <div className="col-md-3">
                         <div className="form-group">
                           <label
@@ -1051,6 +1055,10 @@ function CreateQuotation(props: MyComponentProps) {
                           />
                         </div>
                       </div> 
+
+                      </>
+                      )}
+
                       <div className="col-md-3">
                         <div className="form-group">
                           <label
