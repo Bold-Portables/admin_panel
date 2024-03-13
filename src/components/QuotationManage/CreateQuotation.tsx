@@ -108,6 +108,17 @@ function CreateQuotation(props: MyComponentProps) {
     activelyCleaned: false,
   });
 
+  const [eventDetails, setEventDetails] = useState({
+    eventName: "",
+    eventDate: "",
+    eventType: "",
+    eventLocation: "",
+    eventMapLocation: {
+      type: "Point",
+      coordinates: [0, 0],
+    },
+  });
+
   useEffect(() => {
     getCustomerListData()
   }, []);
@@ -207,6 +218,8 @@ function CreateQuotation(props: MyComponentProps) {
     let payload: any = 
     { 
       ...quotation,
+      vipSection,
+      eventDetails,
       costDetails: servicesPrice,
       coordinator: coordinator,
       isAdmin: true,
