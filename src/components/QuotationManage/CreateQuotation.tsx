@@ -150,6 +150,10 @@ function CreateQuotation(props: MyComponentProps) {
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setQuotation((prev) => ({ ...prev, [name]: value }));
+    
+    if (name === 'special_requirements' && value === '') {
+      setServicesPrice((prev) => ({...prev, ['specialRequirementsCost']: 0}))
+    }
   };
 
   const handleChangeCoordinator = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -1084,7 +1088,7 @@ function CreateQuotation(props: MyComponentProps) {
                             value={quotation.special_requirements}
                             onChange={handleChangeQuotation}
                             type="text"
-                            name="title"
+                            name="special_requirements"
                             className="form-control"
                             id="inputEmail4"
                             placeholder="Special Requirements"
@@ -1100,6 +1104,7 @@ function CreateQuotation(props: MyComponentProps) {
                             Cost
                           </label>
                           <input
+                            disabled={!quotation.special_requirements}
                             min={0}
                             value={servicesPrice.specialRequirementsCost}
                             onChange={handleChangeServicePrice}
@@ -1126,7 +1131,7 @@ function CreateQuotation(props: MyComponentProps) {
                             name="serviceFrequency"
                             className="form-control"
                             id="inputEmail4"
-                            placeholder="Service Frequency"
+                            placeholder="Once per week"
                           />
                         </div>
                       </div>
