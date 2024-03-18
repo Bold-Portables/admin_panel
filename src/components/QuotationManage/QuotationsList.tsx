@@ -33,6 +33,7 @@ const QuotationsList = (props: MyComponentProps) => {
   const [createModal, setCreateModal] = useState<boolean>(false);
   const [cancelModal, setCancelModal] = useState<boolean>(false);
 
+  const [order, setOrder] = useState("");
   const [quotationLabel, setQuotationLabel] = useState<string>("All");
   const [quotationCategory, setQuotationCategory] = useState<string>("all");
 
@@ -114,6 +115,12 @@ const QuotationsList = (props: MyComponentProps) => {
     }
   };
 
+
+  const changeOrder = (order: string) => {
+    setCurrentPage(1);
+    // setOrder(order);
+  };
+
   const handleCancelModal = (_id: string, quoteType: string) => {
     setQuotationId(_id);
     setQuotationType(quoteType);
@@ -162,18 +169,31 @@ const QuotationsList = (props: MyComponentProps) => {
                       className="toggle-expand-content"
                       data-content="pageMenu"
                     >
-                      <ul className="nk-block-tools g-3">
-                      <li className="nk-block-tools-opt">
-                          <button
-                            type="button"
-                            onClick={() => setCreateModal(true)}
-                            className="btn btn-primary d-none d-md-inline-flex"
-                          >
-                            <em className="icon ni ni-note-add"></em>
-                            <span>
-                              New quotation
-                            </span>
-                          </button>
+                    <ul className="nk-block-tools g-3">
+                      <li>
+                          <div className="drodown">
+                            <a
+                              href="#"
+                              className="dropdown-toggle dropdown-indicator btn btn-outline-light btn-white"
+                              data-bs-toggle="dropdown"
+                            >
+                              Order by
+                            </a>
+                            <div className="dropdown-menu dropdown-menu-end">
+                              <ul className="link-list-opt no-bdr">
+                                <li>
+                                  <a onClick={() => changeOrder("new")}>
+                                    <span>Newest</span>
+                                  </a>
+                                </li>
+                                <li>
+                                  <a onClick={() => changeOrder("old")}>
+                                    <span>Oldest</span>
+                                  </a>
+                                </li>
+                              </ul>
+                            </div>
+                          </div>
                         </li>
                         <li>
                           <div className="drodown">
@@ -270,6 +290,18 @@ const QuotationsList = (props: MyComponentProps) => {
                               </ul>
                             </div>
                           </div>
+                        </li>
+                        <li className="nk-block-tools-opt">
+                          <button
+                            type="button"
+                            onClick={() => setCreateModal(true)}
+                            className="btn btn-primary d-none d-md-inline-flex"
+                          >
+                            <em className="icon ni ni-plus"></em>
+                            <span>
+                              Create
+                            </span>
+                          </button>
                         </li>
                       </ul>
                     </div>
