@@ -39,13 +39,13 @@ const QuotationsList = (props: MyComponentProps) => {
 
   useEffect(() => {
     getQuotationData();
-  }, [currentPage, quotationCategory, itemsPerPage]);
+  }, [currentPage, quotationCategory, itemsPerPage, order]);
 
   const getQuotationData = async () => {
     setLoading(true);
     await authAxios()
       .get(
-        `quotation/get-quotation-of-user/${quotationCategory}?page=${currentPage}&limit=${itemsPerPage}`
+        `quotation/get-quotation-of-user/${quotationCategory}?page=${currentPage}&limit=${itemsPerPage}&order=${order}`
       )
       .then(
         (response) => {
@@ -118,7 +118,7 @@ const QuotationsList = (props: MyComponentProps) => {
 
   const changeOrder = (order: string) => {
     setCurrentPage(1);
-    // setOrder(order);
+    setOrder(order);
   };
 
   const handleCancelModal = (_id: string, quoteType: string) => {
