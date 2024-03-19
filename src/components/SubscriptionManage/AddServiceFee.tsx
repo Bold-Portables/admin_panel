@@ -25,6 +25,7 @@ function EditSubscription(props: MyComponentProps) {
     monthlyCost: 0,
     upgradedCost: 0,
   });
+  const [serviceRequests, setServiceRequests] = useState([]);
 
   useEffect(() => {
     getSubscriptionData();
@@ -48,6 +49,9 @@ function EditSubscription(props: MyComponentProps) {
         (response) => {
           setLoading(false);
           if (response.data.status === 1) {
+            // console.log(response.data.data.serviceRequests)
+
+            setServiceRequests(response.data.data.serviceRequests)
             setSubscription(response.data.data.subscription)
           }
         },
@@ -112,7 +116,10 @@ function EditSubscription(props: MyComponentProps) {
           </a>
           <div className="modal-body modal-body-md">
             <h5 className="title">Charge Service Fee</h5>
+
             <hr></hr>
+
+            <h6 className="title my-3">{serviceRequests.length} Service requests</h6>
          
             <div className="tab-content">
               {(

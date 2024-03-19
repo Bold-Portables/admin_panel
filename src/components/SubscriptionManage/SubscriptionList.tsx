@@ -434,22 +434,6 @@ function SubscriptionList(props: MyComponentProps) {
                                         </li>
                                       )}
 
-                                    {/* {item.status === "ACTIVE" && (
-                                      <li>
-                                        <a
-                                          onClick={() =>
-                                            handleAutoAssign(
-                                              item.quotationId,
-                                              item.quotationType
-                                            )
-                                          }
-                                        >
-                                          <em className="icon ni ni-move"></em>
-                                          <span>Auto Assign</span>
-                                        </a>
-                                      </li>
-                                    )} */}
-
                                     <li>
                                       <a
                                         onClick={() =>
@@ -489,7 +473,7 @@ function SubscriptionList(props: MyComponentProps) {
                                       </li>
                                     )}
 
-                                    {/* {item.status === "ACTIVE" && (
+                                    {item.status === "ACTIVE" && (
                                       <li>
                                         <a
                                           onClick={() => handleAddServiceFee(item)}
@@ -498,7 +482,7 @@ function SubscriptionList(props: MyComponentProps) {
                                           <span>Charge Service</span>
                                         </a>
                                       </li>
-                                    )} */}
+                                    )}
                                   
                                   </ul>
                                 </div>
