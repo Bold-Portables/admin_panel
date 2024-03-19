@@ -4,6 +4,7 @@ import { toast } from "react-toastify";
 import IsLoadingHOC from "../../Common/IsLoadingHOC";
 import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import Select from "react-select";
+import AsyncSelect from 'react-select/async';
 import moment from "moment";
 import { socketService } from "../../config/socketService";
 
@@ -119,34 +120,6 @@ function CreateQuotation(props: MyComponentProps) {
     },
   });
 
-  useEffect(() => {
-    getCustomerListData()
-  }, []);
-
-  const getCustomerListData = async () => {
-    setLoading(true);
-
-    // temporary axios call
-    await authAxios()
-      .get(`/auth/get-all-users?page=${1}&limit=${1000}`)
-      .then(
-        (response) => {
-          setLoading(false);
-          if (response.data.status === 1) {
-            const resData = response.data.data;
-            setCoordinators(resData.users);
-          }
-        },
-        (error) => {
-          setLoading(false);
-          toast.error(error.response.data.message);
-        }
-      )
-      .catch((error) => {
-        console.log("errorrrr", error);
-      });
-  };
-
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setQuotation((prev) => ({ ...prev, [name]: value }));
@@ -217,6 +190,31 @@ function CreateQuotation(props: MyComponentProps) {
     const { name, value } = e.target;
     setServicesPrice((prev) => ({ ...prev, [name]: parseInt(value) }));
   };
+
+  
+  const loadOptions = async (input: string) => {
+    try {
+      const response = await authAxios().get(`/auth/get-all-users?page=${1}&limit=${1000}&input=${input}`);
+      if (response.data.status === 1) {
+        const resData = response.data.data;
+        setCoordinators(resData.users);
+  
+        const options = resData.users.map((user: any) => ({
+          value: user._id,
+          label: `${user.name} - ${user.email}`,
+          label_input: `${user.name}`
+        }));
+  
+        return options;
+      } else {
+        throw new Error("Failed to fetch users");
+      }
+    } catch (error: any) {
+      toast.error(error.response?.data?.message || "An error occurred");
+      return [];
+    }
+  };
+  
 
   const handleSubmit = async () => {
     let payload: any = 
@@ -311,10 +309,11 @@ function CreateQuotation(props: MyComponentProps) {
                           <label className="form-label" htmlFor="full-name">
                             User
                           </label>
-                          <Select 
-                            onChange={handleSelectUser} 
-                            isClearable={true}
+                          <AsyncSelect 
+                            loadOptions={loadOptions}
+                            onChange={handleSelectUser}
                             placeholder="Search by name or email"
+                            isClearable={true}
                             formatOptionLabel={(option, { context }) => {
                               return context === 'menu' ? `${option.label}` : `${option.label_input}`;
                             }}
@@ -326,10 +325,9 @@ function CreateQuotation(props: MyComponentProps) {
                                 primary25: '#f4f6f9',
                                 primary: '#854fff',
                               },
-                            })}
-                            options={coordinators.map((user) => ({ value: user._id, 
-                                                                   label: `${user.name} - ${user.email}`, 
-                                                                   label_input: `${user.name}`}))} />
+                            })} />
+
+              
                         </div>
                       </div>
                       <div className="col-md-6">
