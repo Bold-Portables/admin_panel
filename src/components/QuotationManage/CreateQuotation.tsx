@@ -6,6 +6,7 @@ import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import Select from "react-select";
 import AsyncSelect from 'react-select/async';
 import moment from "moment";
+import { debounce } from "lodash";
 import { socketService } from "../../config/socketService";
 
 interface ServicesPrice {
@@ -194,7 +195,7 @@ function CreateQuotation(props: MyComponentProps) {
   
   const loadOptions = async (input: string) => {
     try {
-      const response = await authAxios().get(`/auth/get-all-users?page=${1}&limit=${1000}&input=${input}`);
+      const response = await authAxios().get(`/auth/get-all-users?page=${1}&limit=${10}&input=${input}`);
       if (response.data.status === 1) {
         const resData = response.data.data;
         setCoordinators(resData.users);
@@ -214,7 +215,6 @@ function CreateQuotation(props: MyComponentProps) {
       return [];
     }
   };
-  
 
   const handleSubmit = async () => {
     let payload: any = 
@@ -309,7 +309,8 @@ function CreateQuotation(props: MyComponentProps) {
                           <label className="form-label" htmlFor="full-name">
                             User
                           </label>
-                          <AsyncSelect 
+                          <AsyncSelect
+                            defaultOptions
                             loadOptions={loadOptions}
                             onChange={handleSelectUser}
                             placeholder="Search by name or email"
