@@ -22,7 +22,7 @@ function EditSubscription(props: MyComponentProps) {
   const [userData, setUserData] = useState({
     name: "",
     email: "",
-    cellNumber: "",
+    mobile: "",
   });
 
   const handleUserData = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -65,7 +65,7 @@ function EditSubscription(props: MyComponentProps) {
             setUserData({
               name: "",
               email: "",
-              cellNumber: "",
+              mobile: "",
             })
           } else {
             toast.error(response.data.message);
@@ -136,15 +136,15 @@ function EditSubscription(props: MyComponentProps) {
                       />
                     </div>
                     <div className="form-group">
-                      <label className="form-label" htmlFor="cellNumber">
+                      <label className="form-label" htmlFor="mobile">
                         Phone
                       </label>
                       <input
                         required
-                        value={userData.cellNumber}
+                        value={userData.mobile}
                         onChange={handleChangePhone}
                         type="text"
-                        name="cellNumber"
+                        name="mobile"
                         className="form-control"
                         id="newUserPhone"
                         placeholder="Phone"
