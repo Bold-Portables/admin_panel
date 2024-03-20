@@ -119,7 +119,7 @@ function EditSubscription(props: MyComponentProps) {
 
             <hr></hr>
 
-            <h6 className="title my-3">{serviceRequests.length} Service requests</h6>
+            <h6 className="title my-3 text-primary hover:underline">{serviceRequests.length} Service requests</h6>
          
             <div className="tab-content">
               {(
