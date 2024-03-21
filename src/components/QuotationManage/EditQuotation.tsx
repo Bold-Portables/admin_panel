@@ -387,7 +387,7 @@ function EditQuotation(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={moment(quotation.placementDate).format(
+                            value={moment.utc(quotation.placementDate).format(
                               "MMMM Do YYYY"
                             )}
                             type="text"
@@ -704,7 +704,7 @@ function EditQuotation(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={moment(quotation.dateTillUse).format(
+                            value={moment.utc(quotation.dateTillUse).format(
                               "MMMM Do YYYY"
                             )}
                             onChange={handleChangeQuotation}

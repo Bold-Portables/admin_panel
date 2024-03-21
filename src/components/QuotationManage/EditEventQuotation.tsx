@@ -410,7 +410,7 @@ function EditEventQuotation(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={moment(eventDetails && eventDetails?.eventDate).format(
+                            value={moment.utc(eventDetails && eventDetails?.eventDate).format(
                               "MMMM Do YYYY"
                             )}
                             onChange={handleChangeQuotation}
@@ -716,7 +716,7 @@ function EditEventQuotation(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={moment(quotation.dateTillUse).format(
+                            value={moment.utc(quotation.dateTillUse).format(
                               "MMMM Do YYYY"
                             )}
                             onChange={handleChangeQuotation}
