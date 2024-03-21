@@ -5,6 +5,7 @@ import IsLoadingHOC from "../../Common/IsLoadingHOC";
 import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
 import moment from "moment";
 import { socketService } from "../../config/socketService";
+import { eventManager } from "react-toastify/dist/core";
 
 interface ServicesPrice {
   workersCost: number;
@@ -249,6 +250,15 @@ function EditEventSubscription(props: MyComponentProps) {
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setQuotation((prev) => ({ ...prev, [name]: value }));
+
+    if (name === 'special_requirements' && value === '') {
+      setServicesPrice((prev) => ({...prev, ['specialRequirementsCost']: 0}))
+    }
+  };
+
+  const handleChangeEventDetails = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEventDetails((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleChangeVipSection = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -273,7 +283,8 @@ function EditEventSubscription(props: MyComponentProps) {
         costDetails: servicesPrice, 
         updatedCost: updatedCost,
         updatedQuotation: quotation,
-        vipSection: vipSection
+        vipSection: vipSection,
+        eventDetails: eventDetails
       };
 
     setLoading(true);
@@ -416,15 +427,17 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Designated Workers
                           </label>
-                          <input
-                            disabled
-                            value={quotation.designatedWorkers ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="designatedWorkers"
+                            value={quotation.designatedWorkers ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -435,15 +448,19 @@ function EditEventSubscription(props: MyComponentProps) {
                           >
                             Worker Types
                           </label>
-                          <input
-                            disabled
-                            value={quotation.workerTypes}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="workerTypes"
+                            value={quotation.workerTypes}
                             className="form-control"
-                            placeholder="Worker Types"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="">Select type</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="both">Both</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -455,15 +472,13 @@ function EditEventSubscription(props: MyComponentProps) {
                             Event Date
                           </label>
                           <input
-                            disabled
-                            value={moment(eventDetails && eventDetails?.eventDate).format(
-                              "MMMM Do YYYY"
-                            )}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="placementDate"
+                            value={moment.utc(eventDetails && eventDetails?.eventDate).format("YYYY-MM-DD")}
+                            type="date"
+                            name="eventDate"
                             className="form-control"
+                            id="inputEmail4"
                             placeholder="Event Date"
+                            onChange={handleChangeEventDetails}
                           />
                         </div>
                       </div>
@@ -535,10 +550,9 @@ function EditEventSubscription(props: MyComponentProps) {
                             Distance
                           </label>
                           <input
-                            disabled
                             value={quotation.distanceFromKelowna}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="distanceFromKelowna"
                             className="form-control"
                             placeholder="Distance"
@@ -573,10 +587,9 @@ function EditEventSubscription(props: MyComponentProps) {
                             Weekly Hours
                           </label>
                           <input
-                            disabled
                             value={quotation.weeklyHours}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="weeklyHours"
                             className="form-control"
                             placeholder="Weekly hours"
@@ -760,14 +773,12 @@ function EditEventSubscription(props: MyComponentProps) {
                             Date Till Use
                           </label>
                           <input
-                            disabled
-                            value={moment(quotation.dateTillUse).format(
-                              "MMMM Do YYYY"
-                            )}
+                            value={moment.utc(quotation.dateTillUse).format("YYYY-MM-DD")}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="date"
                             name="dateTillUse"
                             className="form-control"
+                            id="inputEmail4"
                             placeholder="Date till use"
                           />
                         </div>
@@ -1065,7 +1076,7 @@ function EditEventSubscription(props: MyComponentProps) {
                             value={quotation.special_requirements}
                             onChange={handleChangeQuotation}
                             type="text"
-                            name="title"
+                            name="special_requirements"
                             className="form-control"
                             placeholder="Special Requirements"
                           />
@@ -1100,13 +1111,12 @@ function EditEventSubscription(props: MyComponentProps) {
                             Service Frequency
                           </label>
                           <input
-                            disabled
                             value={quotation.serviceFrequency}
                             onChange={handleChangeQuotation}
                             type="text"
                             name="serviceFrequency"
                             className="form-control"
-                            placeholder="Service Frequency"
+                            placeholder="Once per week"
                           />
                         </div>
                       </div>

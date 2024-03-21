@@ -405,17 +405,6 @@ function CreateQuotation(props: MyComponentProps) {
                           >
                             Designated Workers
                           </label>
-                          {/* <input
-                            disabled
-                            value={quotation.designatedWorkers ? "yes" : "no"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="designatedWorkers"
-                            className="form-control"
-                            id="inputEmail4"
-                            placeholder="Designated workers"
-                          /> */}
-
                           <select
                             required
                             name="designatedWorkers"
