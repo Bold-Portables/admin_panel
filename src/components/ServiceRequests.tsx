@@ -252,17 +252,30 @@ const viewServiceRequestDetails=(id:any)=>{
                             )}
                         </div>
                         <div className="nk-tb-col tb-col-md">
+                          <div style={{ position: "relative",  width: "45px", height: "45px", margin:"10px" }}>
                           {item.images &&
                             item.images.length > 0 &&
                             item.images.map((element: any, index: number) => (
                               <img
-                                key={`${element.image_path }-${index}`}
+                                key={element.image_path}
                                 onClick={() => openLightbox(index, item.images)}
                                 src={`${process.env.REACT_APP_AWS_S3_URL}/${element.image_path}`}
                                 alt="Service img"
-                                style={{ width: "50px", height: "50px" }}
+                                style={{
+                                  position: "absolute",
+                                  top: "0",
+                                  left: "0",
+                                  width: "100%",
+                                  height: "100%",
+                                  margin: `${index * 4}px`,
+                                  objectFit: "cover",
+                                  boxShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+                                  cursor: "pointer",
+                                  zIndex: index
+                                }}
                               />
                             ))}
+                          </div>
                         </div>
                         <div className="nk-tb-col tb-col-md">
                           <span>{getFormatedDate(item.createdAt)}</span>
