@@ -180,7 +180,9 @@ function EditQuotation(props: MyComponentProps) {
 
   const handleSelectChange = (e: any) => {
     const { name, value } = e.target;
-    setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : false }));
+    setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : 
+                                               value === 'no' ? false :
+                                               value }));
 
     let cost: string
 
@@ -203,6 +205,10 @@ function EditQuotation(props: MyComponentProps) {
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setQuotation((prev) => ({ ...prev, [name]: value }));
+
+    if (name === 'special_requirements' && value === '') {
+      setServicesPrice((prev) => ({...prev, ['specialRequirementsCost']: 0}))
+    }
   };
 
   const handleChangeCoordinator = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -367,16 +373,17 @@ function EditQuotation(props: MyComponentProps) {
                           >
                             Designated Workers
                           </label>
-                          <input
-                            disabled
-                            value={quotation.designatedWorkers ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="designatedWorkers"
+                            value={quotation.designatedWorkers ? "yes" : "no"}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Designated workers"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -387,16 +394,19 @@ function EditQuotation(props: MyComponentProps) {
                           >
                             Worker Types
                           </label>
-                          <input
-                            disabled
-                            value={quotation.workerTypes}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="workerTypes"
+                            value={quotation.workerTypes}
                             className="form-control"
-                            id="inputEmail4"
-                            placeholder="Worker Types"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="">Select type</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="both">Both</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -408,15 +418,13 @@ function EditQuotation(props: MyComponentProps) {
                             Placement Date
                           </label>
                           <input
-                            disabled
-                            value={moment(quotation.placementDate).format(
-                              "MMMM Do YYYY"
-                            )}
-                            type="text"
+                            value={moment(quotation.placementDate).format("YYYY-MM-DD")}
+                            type="date"
                             name="placementDate"
                             className="form-control"
                             id="inputEmail4"
                             placeholder="Placement Date"
+                            onChange={handleChangeQuotation}
                           />
                         </div>
                       </div>
@@ -489,10 +497,9 @@ function EditQuotation(props: MyComponentProps) {
                             Distance
                           </label>
                           <input
-                            disabled
                             value={quotation.distanceFromKelowna}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="distanceFromKelowna"
                             className="form-control"
                             id="inputEmail4"
@@ -529,10 +536,9 @@ function EditQuotation(props: MyComponentProps) {
                             Weekly Hours
                           </label>
                           <input
-                            disabled
                             value={quotation.weeklyHours}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="weeklyHours"
                             className="form-control"
                             id="inputEmail4"
@@ -723,12 +729,9 @@ function EditQuotation(props: MyComponentProps) {
                             Date Till Use
                           </label>
                           <input
-                            disabled
-                            value={moment(quotation.dateTillUse).format(
-                              "MMMM Do YYYY"
-                            )}
+                            value={moment(quotation.dateTillUse).format("YYYY-MM-DD")}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="date"
                             name="dateTillUse"
                             className="form-control"
                             id="inputEmail4"
@@ -871,7 +874,7 @@ function EditQuotation(props: MyComponentProps) {
                             value={quotation.special_requirements}
                             onChange={handleChangeQuotation}
                             type="text"
-                            name="title"
+                            name="special_requirements"
                             className="form-control"
                             id="inputEmail4"
                             placeholder="Special Requirements"
@@ -908,14 +911,13 @@ function EditQuotation(props: MyComponentProps) {
                             Service Frequency
                           </label>
                           <input
-                            disabled
                             value={quotation.serviceFrequency}
                             onChange={handleChangeQuotation}
                             type="text"
                             name="serviceFrequency"
                             className="form-control"
                             id="inputEmail4"
-                            placeholder="Service Frequency"
+                            placeholder="Once per week"
                           />
                         </div>
                       </div>
