@@ -729,7 +729,7 @@ function EditQuotation(props: MyComponentProps) {
                             Date Till Use
                           </label>
                           <input
-                            value={moment(quotation.dateTillUse).format("YYYY-MM-DD")}
+                            value={moment.utc(quotation.dateTillUse).format("YYYY-MM-DD")}
                             onChange={handleChangeQuotation}
                             type="date"
                             name="dateTillUse"
