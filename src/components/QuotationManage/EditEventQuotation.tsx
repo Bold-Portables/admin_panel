@@ -244,6 +244,10 @@ function EditEventQuotation(props: MyComponentProps) {
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setQuotation((prev) => ({ ...prev, [name]: value }));
+
+    if (name === 'special_requirements' && value === '') {
+      setServicesPrice((prev) => ({...prev, ['specialRequirementsCost']: 0}))
+    }
   };
 
   const handleChangeEventDetails = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -638,15 +642,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Use At Night
                           </label>
-                          <input
-                            disabled
-                            value={quotation.useAtNight ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="useAtNight"
+                            value={quotation.useAtNight ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -677,15 +682,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Use In Winter
                           </label>
-                          <input
-                            disabled
-                            value={quotation.useInWinter ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="useInWinter"
+                            value={quotation.useInWinter ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -717,7 +723,6 @@ function EditEventQuotation(props: MyComponentProps) {
                             Number of units
                           </label>
                           <input
-                            disabled
                             value={quotation.numUnits}
                             onChange={handleChangeQuotation}
                             type="text"
@@ -756,14 +761,12 @@ function EditEventQuotation(props: MyComponentProps) {
                             Date Till Use
                           </label>
                           <input
-                            disabled
-                            value={moment.utc(quotation.dateTillUse).format(
-                              "MMMM Do YYYY"
-                            )}
+                            value={moment.utc(quotation.dateTillUse).format("YYYY-MM-DD")}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="date"
                             name="dateTillUse"
                             className="form-control"
+                            id="inputEmail4"
                             placeholder="Date till use"
                           />
                         </div>
@@ -776,15 +779,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Handwashing
                           </label>
-                          <input
-                            disabled
-                            value={quotation.handwashing ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="handwashing"
+                            value={quotation.handwashing ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -815,15 +819,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Hand Sanitizer Pump
                           </label>
-                          <input
-                            disabled
-                            value={quotation.handSanitizerPump ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="handSanitizerPump"
+                            value={quotation.handSanitizerPump ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -854,15 +859,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Twice Weekly Service
                           </label>
-                          <input
-                            disabled
-                            value={quotation.twiceWeeklyService ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="title"
+                          <select
+                            required
+                            name="twiceWeeklyService"
+                            value={quotation.twiceWeeklyService ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -893,15 +899,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Alcohol Served
                           </label>
-                          <input
-                            disabled
-                            value={quotation.alcoholServed ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="alcoholServed"
+                            value={quotation.alcoholServed ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -932,15 +939,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Pay Per Use
                           </label>
-                          <input
-                            disabled
-                            value={vipSection.payPerUse ? "Yes" : "No"}
-                            onChange={handleChangeVipSection}
-                            type="text"
+                          <select
+                            required
                             name="payPerUse"
+                            value={vipSection.payPerUse ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -972,15 +980,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Fenced Off
                           </label>
-                          <input
-                            disabled
-                            value={vipSection.fencedOff ? "Yes" : "No"}
-                            onChange={handleChangeVipSection}
-                            type="text"
+                          <select
+                            required
                             name="fencedOff"
+                            value={vipSection.fencedOff ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -1011,15 +1020,16 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Actively Cleaned
                           </label>
-                          <input
-                            disabled
-                            value={vipSection.activelyCleaned ? "Yes" : "No"}
-                            onChange={handleChangeVipSection}
-                            type="text"
+                          <select
+                            required
                             name="activelyCleaned"
+                            value={vipSection.activelyCleaned ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={(e) => handleSelectChange(e, true)}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-3">
@@ -1054,7 +1064,7 @@ function EditEventQuotation(props: MyComponentProps) {
                             value={quotation.special_requirements}
                             onChange={handleChangeQuotation}
                             type="text"
-                            name="title"
+                            name="special_requirements"
                             className="form-control"
                             placeholder="Special Requirements"
                           />
@@ -1089,13 +1099,13 @@ function EditEventQuotation(props: MyComponentProps) {
                             Service Frequency
                           </label>
                           <input
-                            disabled
                             value={quotation.serviceFrequency}
                             onChange={handleChangeQuotation}
                             type="text"
                             name="serviceFrequency"
                             className="form-control"
-                            placeholder="Service Frequency"
+                            id="inputEmail4"
+                            placeholder="Once per week"
                           />
                         </div>
                       </div>
