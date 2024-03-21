@@ -418,7 +418,7 @@ function EditQuotation(props: MyComponentProps) {
                             Placement Date
                           </label>
                           <input
-                            value={moment(quotation.placementDate).format("YYYY-MM-DD")}
+                            value={moment.utc(quotation.placementDate).format("YYYY-MM-DD")}
                             type="date"
                             name="placementDate"
                             className="form-control"
