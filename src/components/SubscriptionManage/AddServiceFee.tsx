@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { authAxios } from "../../config/config";
+import { getFormatedDate } from "../../Helper";
 import { toast } from "react-toastify";
 import IsLoadingHOC from "../../Common/IsLoadingHOC";
 import IsLoggedinHOC from "../../Common/IsLoggedInHOC";
+import Lightbox from "react-image-lightbox";
 
 interface MyComponentProps {
   setLoading: (isComponentLoading: boolean) => void;
@@ -26,6 +28,9 @@ function EditSubscription(props: MyComponentProps) {
     upgradedCost: 0,
   });
   const [serviceRequests, setServiceRequests] = useState([]);
+  const [isOpen, setIsOpen] = useState<boolean>(false);
+  const [photoIndex, setPhotoIndex] = useState<number>(0);
+  const [images, setImages] = useState<any>([]);
 
   useEffect(() => {
     getSubscriptionData();
@@ -49,7 +54,7 @@ function EditSubscription(props: MyComponentProps) {
         (response) => {
           setLoading(false);
           if (response.data.status === 1) {
-            // console.log(response.data.data.serviceRequests)
+            console.log(response.data.data.serviceRequests)
 
             setServiceRequests(response.data.data.serviceRequests)
             setSubscription(response.data.data.subscription)
@@ -63,6 +68,20 @@ function EditSubscription(props: MyComponentProps) {
       .catch((error) => {
         console.log("errorrrr", error);
       });
+  };
+
+  const openLightbox = (index: number, imagesPath: any) => {
+    const allImagesPath: any[] = [];
+    imagesPath.forEach((item: any) => {
+      allImagesPath.push(`${process.env.REACT_APP_AWS_S3_URL}/${item.image_path}`);
+    });
+    setImages(allImagesPath);
+    setPhotoIndex(index);
+    setIsOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setIsOpen(false);
   };
 
   const handleSubmit = async () => {
@@ -105,7 +124,7 @@ function EditSubscription(props: MyComponentProps) {
       style={{ display: modal ? "block" : "none" }}
       role="dialog"
     >
-      <div className="modal-dialog modal-md modal-dialog-top" role="document">
+      <div className="modal-dialog modal-xl modal-dialog-top" role="document">
         <div className="modal-content">
           <a
             onClick={() => closeModal(false)}
@@ -120,6 +139,67 @@ function EditSubscription(props: MyComponentProps) {
             <hr></hr>
 
             <h6 className="title my-3 text-primary hover:underline">{serviceRequests.length} Service requests</h6>
+
+            <table className="table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Name</th>
+                  <th>Phone</th>
+                  <th>Email</th>
+                  <th>Type</th>
+                  <th>Images</th>
+                  <th>Created At</th>
+                </tr>
+              </thead>
+              {serviceRequests &&
+                serviceRequests.length > 0 &&
+                serviceRequests.map((request: any, index: number) => (
+                <tbody key={index + 1}>
+                <tr className="height-50"></tr>
+                <tr>
+                  <td>
+                    {request._id?.slice(-8)?.toUpperCase()}
+                  </td>
+                  <td className="">
+                    {request?.name}
+                  </td>
+                  <td className="border-xside">
+                    {request?.phone}
+                  </td>
+                  <td className="">
+                    {request?.email}
+                  </td>
+
+                  {request.serviceTypes &&
+                    request.serviceTypes.length > 0 &&
+                    request.serviceTypes.map(
+                    (type: string, index: number) => (
+                      <td className="" key={`type-${index + 1}`}>
+                        {type}
+                      </td>
+                    )
+                  )}
+                  <td>
+                    {request.images &&
+                      request.images.length > 0 &&
+                      request.images.map((element: any, index: number) => (
+                    <img
+                        key={element.image_path}
+                        onClick={() => openLightbox(index, request.images)}
+                        src={`${process.env.REACT_APP_AWS_S3_URL}/${element.image_path}`}
+                        alt="Service img"
+                        style={{ width: "45px", height: "45px" }}
+                      />
+                    ))}
+                  </td>
+                  <td>
+                    {getFormatedDate(request.createdAt)}
+                  </td>
+                </tr>
+              </tbody>
+              ))}
+            </table>
          
             <div className="tab-content">
               {(
