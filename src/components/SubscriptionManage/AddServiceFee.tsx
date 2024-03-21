@@ -169,28 +169,42 @@ function EditSubscription(props: MyComponentProps) {
                   <td className="">
                     {request?.email}
                   </td>
-
-                  {request.serviceTypes &&
+                  <td className="" key={`type-${index + 1}`}>
+                    <ul>
+                    {request.serviceTypes &&
                     request.serviceTypes.length > 0 &&
                     request.serviceTypes.map(
-                    (type: string, index: number) => (
-                      <td className="" key={`type-${index + 1}`}>
-                        {type}
-                      </td>
-                    )
-                  )}
+                      (type: string, index: number) => (
+                        <li key={`type-${index + 1}`}>{type}</li>
+                      )
+                    )}
+                    </ul>
+                  </td>
                   <td>
+                    <div style={{ position: "relative",  width: "45px", height: "45px", }}>
                     {request.images &&
-                      request.images.length > 0 &&
-                      request.images.map((element: any, index: number) => (
-                    <img
-                        key={element.image_path}
-                        onClick={() => openLightbox(index, request.images)}
-                        src={`${process.env.REACT_APP_AWS_S3_URL}/${element.image_path}`}
-                        alt="Service img"
-                        style={{ width: "45px", height: "45px" }}
-                      />
-                    ))}
+                     request.images.length > 0 &&
+                     request.images.map((element: any, index: number) => (
+                        <img
+                          key={element.image_path}
+                          onClick={() => openLightbox(index, request.images)}
+                          src={`${process.env.REACT_APP_AWS_S3_URL}/${element.image_path}`}
+                          alt="Service img"
+                          style={{
+                            position: "absolute",
+                            top: "0",
+                            left: "0",
+                            width: "100%",
+                            height: "100%",
+                            margin: `${index * 4}px`,
+                            objectFit: "cover",
+                            boxShadow: "0 2px 4px rgba(0, 0, 0, 0.5)",
+                            cursor: "pointer",
+                            zIndex: index
+                          }}
+                        />
+                      ))}
+                    </div>
                   </td>
                   <td>
                     {getFormatedDate(request.createdAt)}
