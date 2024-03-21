@@ -122,8 +122,7 @@ function EditSubscription(props: MyComponentProps) {
     <div
       className={`modal max-modal-size fade ${modal ? "show" : "hide"}`}
       style={{ display: modal ? "block" : "none" }}
-      role="dialog"
-    >
+      role="dialog">
       <div className="modal-dialog modal-xl modal-dialog-top" role="document">
         <div className="modal-content">
           <a
@@ -310,6 +309,24 @@ function EditSubscription(props: MyComponentProps) {
           </div>
         </div>
       </div>
+      {isOpen && (
+        <Lightbox
+          mainSrc={images[photoIndex]}
+          nextSrc={images[(photoIndex + 1) % images.length]}
+          prevSrc={
+            images[(photoIndex + images.length - 1) % images.length]
+          }
+          onCloseRequest={closeLightbox}
+          onMovePrevRequest={() =>
+            setPhotoIndex(
+              (photoIndex + images.length - 1) % images.length
+            )
+          }
+          onMoveNextRequest={() =>
+            setPhotoIndex((photoIndex + 1) % images.length)
+          }
+        />
+      )}
     </div>
   );
 }
