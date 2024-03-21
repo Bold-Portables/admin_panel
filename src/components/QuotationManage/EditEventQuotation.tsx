@@ -205,9 +205,50 @@ function EditEventQuotation(props: MyComponentProps) {
       });
   };
 
+  const handleSelectChange = (e: any, vip: boolean = false) => {
+    const { name, value } = e.target;
+
+    if (vip) {
+        setVipSection((prev) => ({...prev, [name]: value === 'yes' ? true : false}));
+        if (value === 'no') {
+            setServicesPrice((prev) => ({...prev, [name]: 0}))
+          }
+        
+    } else {
+      setQuotation((prev) => ({ ...prev, [name]: value === 'yes' ? true : 
+                                                 value === 'no' ? false :
+                                                 value }));
+    }
+
+    let cost: string
+
+    switch (name) {
+      case 'handwashing':
+        cost = 'handWashingCost';
+        break;
+      case 'twiceWeeklyService':
+        cost = 'twiceWeeklyServicing';
+        break;
+      case 'alcoholServed':
+        cost = 'alcoholServed';
+        break;
+      default:
+        cost = `${name}Cost`;
+    }
+
+    if (value === 'no') {
+      setServicesPrice((prev) => ({...prev, [cost]: 0}))
+    }
+  }
+
   const handleChangeQuotation = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setQuotation((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleChangeEventDetails = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setEventDetails((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleChangeVipSection = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -370,15 +411,17 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Designated Workers
                           </label>
-                          <input
-                            disabled
-                            value={quotation.designatedWorkers ? "Yes" : "No"}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="designatedWorkers"
+                            value={quotation.designatedWorkers ? "yes" : "no"}
                             className="form-control"
-                            placeholder="Yes/No"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="yes">Yes</option>
+                            <option value="no">No</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -389,15 +432,19 @@ function EditEventQuotation(props: MyComponentProps) {
                           >
                             Worker Types
                           </label>
-                          <input
-                            disabled
-                            value={quotation.workerTypes}
-                            onChange={handleChangeQuotation}
-                            type="text"
+                          <select
+                            required
                             name="workerTypes"
+                            value={quotation.workerTypes}
                             className="form-control"
-                            placeholder="Worker Types"
-                          />
+                            onChange={handleSelectChange}
+                          >
+                            <option value="">Select type</option>
+                            <option value="male">Male</option>
+                            <option value="female">Female</option>
+                            <option value="both">Both</option>
+                            
+                          </select>
                         </div>
                       </div>
                       <div className="col-md-6">
@@ -409,15 +456,13 @@ function EditEventQuotation(props: MyComponentProps) {
                             Event Date
                           </label>
                           <input
-                            disabled
-                            value={moment.utc(eventDetails && eventDetails?.eventDate).format(
-                              "MMMM Do YYYY"
-                            )}
-                            onChange={handleChangeQuotation}
-                            type="text"
-                            name="placementDate"
+                            value={moment.utc(eventDetails && eventDetails?.eventDate).format("YYYY-MM-DD")}
+                            type="date"
+                            name="eventDate"
                             className="form-control"
+                            id="inputEmail4"
                             placeholder="Event Date"
+                            onChange={handleChangeEventDetails}
                           />
                         </div>
                       </div>
@@ -430,14 +475,13 @@ function EditEventQuotation(props: MyComponentProps) {
                             Male workers
                           </label>
                           <input
-                            disabled
                             value={quotation.maleWorkers}
                             onChange={handleChangeQuotation}
                             type="number"
                             name="maleWorkers"
                             className="form-control"
                             id="maleWorkers"
-                            placeholder="DisMale workerstance"
+                            placeholder="0"
                           />
                         </div>
                       </div>
@@ -450,15 +494,13 @@ function EditEventQuotation(props: MyComponentProps) {
                             Female workers
                           </label>
                           <input
-                            min={0}
-                            disabled
                             value={quotation.femaleWorkers}
-                            onChange={handleChangeServicePrice}
+                            onChange={handleChangeQuotation}
                             type="number"
-                            name="deliveryPrice"
+                            name="femaleWorkers"
                             className="form-control"
                             id="femaleWorkers"
-                            placeholder="Female workers"
+                            placeholder="0"
                           />
                         </div>
                       </div>
@@ -472,7 +514,8 @@ function EditEventQuotation(props: MyComponentProps) {
                           </label>
                           <input
                             disabled
-                            value={quotation.totalWorkers}
+                            value={(parseInt(`${quotation.maleWorkers}`) + parseInt(`${quotation.femaleWorkers}`)) ? 
+                                   (parseInt(`${quotation.maleWorkers}`) + parseInt(`${quotation.femaleWorkers}`)) : 0}
                             onChange={handleChangeQuotation}
                             type="text"
                             name="title"
@@ -491,10 +534,9 @@ function EditEventQuotation(props: MyComponentProps) {
                             Distance
                           </label>
                           <input
-                            disabled
                             value={quotation.distanceFromKelowna}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="distanceFromKelowna"
                             className="form-control"
                             placeholder="Distance"
@@ -529,10 +571,9 @@ function EditEventQuotation(props: MyComponentProps) {
                             Weekly Hours
                           </label>
                           <input
-                            disabled
                             value={quotation.weeklyHours}
                             onChange={handleChangeQuotation}
-                            type="text"
+                            type="number"
                             name="weeklyHours"
                             className="form-control"
                             placeholder="Weekly hours"
